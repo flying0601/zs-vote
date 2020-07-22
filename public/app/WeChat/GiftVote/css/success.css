@@ -1,0 +1,82 @@
+@font-face {
+  font-family: "iconfont";
+  src: url("iconfont.eot?t=1525488259092"); /* IE9*/
+  src: url("iconfont.eot?t=1525488259092") format("embedded-opentype"),
+    /* IE6-IE8 */
+      url("data:application/x-font-woff;charset=utf-8;base64,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")
+      format("woff"),
+    url("iconfont.ttf?t=1525488259092") format("truetype"),
+    /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+      url("iconfont.svg?t=1525488259092#iconfont") format("svg"); /* iOS 4.1- */
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-paixing:before {
+  content: "\e604";
+}
+
+.icon-booming:before {
+  content: "\e60f";
+}
+
+.icon-home1:before {
+  content: "\e64d";
+}
+
+.icon-toupiao:before {
+  content: "\e603";
+}
+
+.icon-zhengque:before {
+  content: "\e6d0";
+}
+
+.icon-jiangpinguanli:before {
+  content: "\e61a";
+}
+
+.icon-baoming1:before {
+  content: "\e63a";
+}
+.contestant_page_header {
+  text-align: center;
+  padding: 20px;
+  padding-top: 10px;
+  background: #ffffff;
+}
+#zbtn {
+  border: 1px solid #949494;
+  border-radius: 5px;
+  width: 40%;
+  margin: 10px 0 10px 30%;
+  line-height: 35px;
+  height: 35px;
+  text-align: center;
+  color: #000;
+}
+#jiandiv {
+  width: 100px;
+  height: 40px;
+  position: relative;
+  top: -15px;
+  left: 40px;
+  line-height: 30px;
+  font-size: 16px;
+  color: #2dcc70;
+  text-align: center;
+  font-weight: bold;
+  background: #fff;
+}
+#jiandiv2 {
+  width: 100%;
+  margin-top: 20px;
+  border: 1px #ccc solid;
+  border-radius: 10px;
+}
