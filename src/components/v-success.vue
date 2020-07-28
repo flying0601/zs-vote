@@ -1,8 +1,8 @@
 <template>
   <div class=''>
-    <div class=""
+    <!-- <div class=""
          v-html="style"
-         v-show="false"></div>
+         v-show="false"></div> -->
     <div class="contestant_page_header">
       <div>
         <h3 style="font-size: 30px;font-weight: bold;line-height: 70px;">给{{voteuser.noid}}号投票成功！</h3>

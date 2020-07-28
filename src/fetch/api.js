@@ -26,5 +26,11 @@ export default {
   },
   postGive (params) {
     return $http('post', '/vote/old/give', params, 0)
+  },
+  getPlayerCensus (params) {
+    return $http('post', '/vote/old/playerCensus', params, 0)
+  },
+  getActiveHost (params) {
+    return $http('get', '/host/getActiveHost', params, 0)
   }
 }

@@ -9,19 +9,80 @@
   <meta name="keywords" content="" />
   <meta name="description" content="" />
   <!-- <link rel="stylesheet" type="text/css" href="../../assets//reset.css"> -->
-  <link rel="stylesheet" type="text/css" href="app/WeChat/GiftVote/css/swiper-3.3.1.min.css">
-  <link href="app/WeChat/GiftVote/css/weui1.0.1.min.css" rel="stylesheet">
-	<link href="app/WeChat/GiftVote/css/bootstrap.min.css" rel="stylesheet">
-	<link href="app/WeChat/GiftVote/css/index.css?34" rel="stylesheet"> 
-  <link href="app/WeChat/GiftVote/css/main.css?2" rel="stylesheet"> 
   <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
   <title>网络评选</title>
+  <style>
+    .skeleton {
+      position: fixed;
+      height: 100%;
+      overflow: hidden;
+      padding: 15px;
+      box-sizing: border-box;
+      background: #fff;
+      width: 100%;
+      top: 0;
+      left: 0;
+    }
+
+    .skeleton-tabs {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+
+    .skeleton-tabs-item {
+      width: 48%;
+      height: 180px;
+      box-sizing: border-box;
+      text-align: center;
+    }
+
+    .skeleton-tabs-item span {
+      display: inline-block;
+      width: 100%;
+      height: 100%;
+      background: #eee;
+    }
+
+    .skeleton-banner {
+      height: 250px;
+      background: #eee;
+      margin-bottom: 15px;
+    }
+
+    .skeleton-productions {
+      height: 50px;
+      margin-bottom: 15px;
+      background: #eee;
+    }
+    
+  </style>
 </head>
 
 <body>
-  <div id="app"></div>
+  <div id="app">
+    <div data-server-rendered=true class="skeleton page">
+      <div class=skeleton-banner></div>
+      <div class=skeleton-productions></div>
+      <div class=skeleton-productions></div>
+      <ul class=skeleton-tabs>
+        <li class=skeleton-tabs-item><span></span></li>
+        <li class=skeleton-tabs-item><span></span></li>
+      </ul>
+      <ul class=skeleton-tabs>
+        <li class=skeleton-tabs-item><span></span></li>
+        <li class=skeleton-tabs-item><span></span></li>
+      </ul>
+      <ul class=skeleton-tabs>
+        <li class=skeleton-tabs-item><span></span></li>
+        <li class=skeleton-tabs-item><span></span></li>
+      </ul>
+    </div>
+  </div>
 </body>
-<script>
+<!-- <script>
   var _hmt = _hmt || [];
   (function () {
     // 这里使用的是 eruda， vconsole也不错，根据个人习惯（两种都是拦截了请求资源，所以遇到一些奇葩的请求问题，不妨注释一下）
@@ -33,6 +94,6 @@
       document.write('<scr' + 'ipt>eruda.init();</scr' + 'ipt>');
     }
   })();
-</script>
+</script> -->
 
 </html>

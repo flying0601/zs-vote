@@ -35,8 +35,8 @@ module.exports = {
     proxy: {
       '/api': {
         // 测试环境
-        // target: 'http://zsapi.i-active.cn',
-        target: 'http://127.0.0.1:8390',
+        target: 'http://zsapi.i-active.cn',
+        // target: 'http://127.0.0.1:8390',
         changeOrigin: true // 是否跨域
       }
     }

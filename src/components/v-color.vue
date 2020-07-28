@@ -35,7 +35,9 @@ export default {
     setColor (config) {
       // console.log('config: ', config.main_color)
 
-      let link = `<link href="app/WeChat/GiftVote/css/index2.css" rel="stylesheet"> `
+      let link = `<link href="app/WeChat/GiftVote/css/index2.css" rel="stylesheet">` +
+      `<link rel="stylesheet" href="app/WeChat/GiftVote/css/donate.css?33">` +
+      `<link rel="stylesheet" href="app/WeChat/GiftVote/css/success.css">`
       let style = `
       <style>
       .threebutton a{background-color:#${config.main_color};}

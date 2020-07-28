@@ -1,10 +1,10 @@
 <template>
   <div class=''>
-    <div class=""
+    <!-- <div class=""
          v-html="style"
-         v-show="false"></div>
+         v-show="false"></div> -->
     <div class="donate_donate"
-         :v-if="style && giveData && giveData.length"
+         :v-if="giveData && giveData.length"
          style="padding-top:0px">
       <div class="weui-panel__bd user_info bg-purple2 bg-blue2">
         <a @click="clickDetails(voteuser)"
@@ -124,7 +124,7 @@
         <a @click="postGive()"
            id="weixin"
            style="width:90%;margin:0 auto"
-           class="weui-btn weui-btn_primary">微信支付</a>
+           class="weui-btn weui-btn_primary">友情赞助</a>
       </div>
 
     </div>
@@ -148,7 +148,7 @@ export default {
   components: {},
   data () {
     return {
-      style: '<link rel="stylesheet" href="app/WeChat/GiftVote/css/donate.css?33">',
+      // style: '<link rel="stylesheet" href="app/WeChat/GiftVote/css/donate.css?33">',
       giveData: [],
       curGive: null,
       pcount: 1,

@@ -1,141 +1,155 @@
 <template>
-  <div class=''>
-    <div class="rq"
-         v-if="giftvote.config && giftvote.config.rqb">
-      <p v-text="`<<网络人气榜>>`"></p>
-      <ul>
-        <li v-for="(item,i) in rankList"
-            :key="i"
-            :style="`background-image:url('app/WeChat/GiftVote/img/hg${i<3?1:2}.gif');`"
-            >
-          <a @click="clickItem(item)"><img :src="item['img1']"></a>
-          <p>{{item['name']}}</p>
-          <p>{{item['votenum']}}</p>
-        </li>
-      </ul>
-    </div>
-    <div style="width: 90%; margin: 0 auto;margin-top:20px;overflow:hidden;">
-      <div style="width: 100%; text-align: left; padding-bottom: 20px;">
-        <div id="jiandiv2">
-          <div id="jiandiv">
-            选手介绍
-          </div>
-          <div style="padding: 0px 0px 10px 10px; margin-top: -10px;">
-            <div style="width: 70%; float: left;">
-              名称：{{voteuser.name}}</div>
-            <div style="width: 26%; text-align: right; float: left;">
-              编号：{{voteuser.noid}}</div>
-            <div style="clear:both"></div>
-            <div style="margin-top:5px">
-              <div v-if="voteuser.details">
-                自我介绍:
-                {{voteuser.details}}
+  <div class='details-box'>
+    <div class="" v-if="!currentComponent">
+      <div class="rq"
+           v-if="giftvote.config && giftvote.config.rqb">
+        <p v-text="`<<网络人气榜>>`"></p>
+        <ul>
+          <li v-for="(item,i) in rankList"
+              :key="i"
+              :style="`background-image:url('app/WeChat/GiftVote/img/hg${i<3?1:2}.gif');`">
+            <a @click="clickItem(item)"><img :src="item['img1']"></a>
+            <p>{{item['name']}}</p>
+            <p>{{item['votenum']}}</p>
+          </li>
+        </ul>
+      </div>
+      <div style="width: 90%; margin: 0 auto;margin-top:20px;overflow:hidden;">
+        <div style="width: 100%; text-align: left; padding-bottom: 20px;">
+          <div id="jiandiv2">
+            <div id="jiandiv">
+              选手介绍
+            </div>
+            <div style="padding: 0px 0px 10px 10px; margin-top: -10px;">
+              <div style="width: 70%; float: left;">
+                名称：{{voteuser.name}}</div>
+              <div style="width: 26%; text-align: right; float: left;">
+                编号：{{voteuser.noid}}</div>
+              <div style="clear:both"></div>
+              <div style="margin-top:5px">
+                <div v-if="voteuser.details">
+                  自我介绍:
+                  {{voteuser.details}}
+                </div>
               </div>
+              <div v-if="giftvote.xs_js">
+                <p style="margin-top:5px">
+
+                  {{giftvote.xs_js}}：{{voteuser.introduction}}
+                </p>
+
+              </div>
+
             </div>
-            <div v-if="giftvote.xs_js">
-              <p style="margin-top:5px">
+          </div>
+          <!--主体 -->
+          <div style="width: 100%; margin-left: 0px; text-align: center;"
+               id="zlb">
 
-                {{giftvote.xs_js}}：{{voteuser.introduction}}
-              </p>
-
+            <div class="zlb">
+              当前票数</div>
+            <div class="zlb"
+                 style="margin-left: -1px; width: 38%;">
+              距上一名差</div>
+            <div class="zlb"
+                 style="margin-left: 1px; width: 35%;">
+              票数榜</div>
+            <div style="clear: both;">
             </div>
-
+            <div style="margin-top: -10px;"
+                 class="zlb"
+                 id="pcount">
+              <span id="votenum2">{{playerCensus && playerCensus.votenum ? playerCensus.votenum : voteuser.votenum }}</span>票</div>
+            <div class="zlb"
+                 style="margin-left: -1px; width: 38%; margin-top: -10px;"
+                 id="pcha">
+              {{playerCensus && playerCensus.diffnext>-1 ? playerCensus.diffnext : 0 }}票</div>
+            <div class="zlb"
+                 style="margin-left: 1px; width: 35%; margin-top: -10px;"
+                 id="pzcount">
+              第{{playerCensus && playerCensus.rownum ? playerCensus.rownum : '' }}名</div>
+            <div style="clear: both;">
+            </div>
+          </div>
+          <div class="img">
+            <img :src="voteuser['img1']"
+                 v-if="voteuser['img1']">
+            <img :src="voteuser['img2']"
+                 v-if="voteuser['img2']">
+            <img :src="voteuser['img3']"
+                 v-if="voteuser['img3']">
+            <img :src="voteuser['img4']"
+                 v-if="voteuser['img4']">
+            <img :src="voteuser['img5']"
+                 v-if="voteuser['img5']">
+            <img :src="voteuser['img6']"
+                 v-if="voteuser['img6']">
+            <img :src="voteuser['img7']"
+                 v-if="voteuser['img7']">
+            <img :src="voteuser['img8']"
+                 v-if="voteuser['img8']">
+            <img :src="voteuser['img9']"
+                 v-if="voteuser['img9']">
+            <img :src="voteuser['img10']"
+                 v-if="voteuser['img10']">
+            <img :src="voteuser['img11']"
+                 v-if="voteuser['img11']">
+            <video v-if="voteuser['img12']"
+                   id="pic_s_img_12"
+                   style="height: auto; max-height: none;"
+                   :src="voteuser['img12']"
+                   width="100%"
+                   height="auto"
+                   controls></video>
           </div>
         </div>
-        <!--主体 -->
-        <div style="width: 100%; margin-left: 0px; text-align: center;"
-             id="zlb">
-
-          <div class="zlb">
-            当前票数</div>
-          <div class="zlb"
-               style="margin-left: -1px; width: 38%;">
-            距上一名差</div>
-          <div class="zlb"
-               style="margin-left: 1px; width: 35%;">
-            票数榜</div>
-          <div style="clear: both;">
+      </div>
+      <div class='vsav'>
+        <div class='vbtn_tnk'><a href="">我也要参加</a></div>
+      </div>
+      <div class="bg-purple3 bg-blue3 mg-t-40"
+           style="height:144px;"></div>
+        <div class="lapiao">
+          <a href="javascript:;"
+             class='l'
+             :style="`background-image: url('app/WeChat/GiftVote/img/zuan_01.png')`"
+             @click="postHelp()"
+             id="mytoupiao">给ta投票</a>
+          <a href="javascript:;"
+             v-if="giftvote.config.hb"
+             :style="`background-image: url('app/WeChat/GiftVote/img/zuan_05.png')`"
+             class='r'
+             @click="getHb('VHb')">生成海报</a>
+          <div v-if="giftvote.config.diamondmodel==0">
+            <div class="add">
+              <a @click="clickGive()">
+                <div class="i">助力</div>
+              </a>
+            </div>
           </div>
-          <div style="margin-top: -10px;"
-               class="zlb"
-               id="pcount">
-            <span id="votenum2">{{voteuser.votenum}}</span>票</div>
-          <div class="zlb"
-               style="margin-left: -1px; width: 38%; margin-top: -10px;"
-               id="pcha">
-            0票</div>
-          <div class="zlb"
-               style="margin-left: 1px; width: 35%; margin-top: -10px;"
-               id="pzcount">
-            第1名</div>
-          <div style="clear: both;">
+          <div v-if="giftvote.config.diamondmodel==2">
+            <div class="add">
+              <a href="">
+                <div class="i">砸金蛋</div>
+              </a>
+            </div>
           </div>
         </div>
-        <div class="img">
-          <img :src="voteuser['img1']"
-               v-if="voteuser['img1']">
-          <img :src="voteuser['img2']"
-               v-if="voteuser['img2']">
-          <img :src="voteuser['img3']"
-               v-if="voteuser['img3']">
-          <img :src="voteuser['img4']"
-               v-if="voteuser['img4']">
-          <img :src="voteuser['img5']"
-               v-if="voteuser['img5']">
-          <img :src="voteuser['img6']"
-               v-if="voteuser['img6']">
-          <img :src="voteuser['img7']"
-               v-if="voteuser['img7']">
-          <img :src="voteuser['img8']"
-               v-if="voteuser['img8']">
-          <img :src="voteuser['img9']"
-               v-if="voteuser['img9']">
-          <img :src="voteuser['img10']"
-               v-if="voteuser['img10']">
-          <img :src="voteuser['img11']"
-               v-if="voteuser['img11']">
-          <video v-if="voteuser['img12']"
-                 id="pic_s_img_12"
-                 style="height: auto; max-height: none;"
-                 :src="voteuser['img12']"
-                 width="100%"
-                 height="auto"
-                 controls></video>
-        </div>
       </div>
+      <!-- <component  v-if="giftvote && currentComponent" :voteuser="voteuser" ref="hb"  @posterimg="posterimg" :is="currentComponent" ></component> -->
+        <v-hb v-if="giftvote && currentComponent"
+              :voteuser="voteuser"
+              ref="hb"
+              @posterimg="posterimg"></v-hb>
+        <van-overlay :show="show"
+                     @click="show = false">
+          <div class="wrapper">
+            <img :src="hbImg"
+                 alt=""
+                 class="img">
+          </div>
+        </van-overlay>
     </div>
-    <div class='vsav'>
-      <div class='vbtn_tnk'><a href="">我也要参加</a></div>
-    </div>
-    <div class="bg-purple3 bg-blue3 mg-t-40"
-         style="height:144px;"></div>
-
-    <div class="lapiao">
-      <a href="javascript:;"
-         class='l'
-         :style="`background-image: url('app/WeChat/GiftVote/img/zuan_01.png')`"
-         @click="postHelp()"
-         id="mytoupiao">给ta投票</a>
-      <a href="javascript:;"
-         v-if="giftvote.config.hb"
-          :style="`background-image: url('app/WeChat/GiftVote/img/zuan_05.png')`"
-         class='r'>生成海报</a>
-      <div v-if="giftvote.config.diamondmodel==0">
-        <div class="add">
-          <a @click="clickGive()">
-            <div class="i">助力</div>
-          </a>
-        </div>
-      </div>
-      <div v-if="giftvote.config.diamondmodel==2">
-        <div class="add">
-          <a href="">
-            <div class="i">砸金蛋</div>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
 </template>
 
 <script>
@@ -148,14 +162,25 @@
 import Vue from 'vue'
 import Toast from 'vant/lib/toast'
 import 'vant/lib/toast/style'
+import Overlay from 'vant/lib/overlay'
+import 'vant/lib/overlay/style'
+import VHb from '@/components/v-hb.vue'
 Vue.use(Toast)
+Vue.use(Overlay)
 export default {
-  props: ['giftvote', 'voteuser', 'player', 'params'],
-  components: { },
+  props: ['giftvote', 'voteuser', 'player', 'params', 'playerCensus'],
+  components: {
+    VHb
+    // VHb (resolve) {
+    //   require(['@/components/v-hb.vue'], resolve)
+    // }
+  },
   data () {
     return {
       currentComponent: null,
-      rankList: []
+      rankList: [],
+      show: false,
+      hbImg: ''
     }
   },
   computed: {},
@@ -163,6 +188,7 @@ export default {
     player (val) {
       this.rankList = val.slice(0, 5)
     }
+
   },
   created () {
     // console.log(this.giftvote)
@@ -192,7 +218,7 @@ export default {
         did: this.params.did
       }
       this.$api.postHelp(pram).then(res => {
-      // if (!res) return
+        // if (!res) return
         toastStart.clear()
         if (res.data) {
           Toast.loading({
@@ -205,6 +231,44 @@ export default {
         }
         // console.log('getCensus', pram.vid, res.data)
       })
+    },
+    postPlayerCensus () {
+      let pram = {
+        noid: this.voteuser.noid,
+        sysid: this.params.sid,
+        pid: this.params.vid
+      }
+      this.$api.getPlayerCensus(pram).then(res => {
+        this.playerCensus = res && res.data && res.data[0]
+        console.log(this.playerCensus)
+      })
+    },
+    getHb (name) {
+      document.documentElement.scrollTop = 0
+      this.currentComponent = name
+      this.$parent.isSider = false
+      console.log('this.currentComponent')
+    },
+    showHb () {
+      this.show = true
+    },
+    posterimg (val) {
+      this.hbImg = val
+      this.showHb()
+      this.$parent.isSider = true
+      this.currentComponent = null
+    },
+    backtop () {
+      // document.documentElement.scrollTop = 0
+      // let timer = setInterval(function () {
+      //   let osTop = document.documentElement.scrollTop || document.body.scrollTop
+      //   let ispeed = Math.floor(-osTop / 5)
+      //   document.documentElement.scrollTop = document.body.scrollTop = osTop + ispeed
+      //   this.isTop = true
+      //   if (osTop === 0) {
+      //     clearInterval(timer)
+      //   }
+      // }, 10)
     }
   },
   destroyed () { }
@@ -213,6 +277,19 @@ export default {
 
 <style lang='scss' scoped>
 @import "@/mixins/_utils.scss";
+.details-box {
+  position: relative;
+  background: #fff;
+  .wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    .img {
+      width: 90%;
+    }
+  }
+}
 .lapiao {
   background-color: rgba(0, 0, 0, 0.6);
   border-top: none;
