@@ -70,7 +70,7 @@
                 <p style="overflow: hidden;text-overflow: ellipsis; white-space: nowrap;">{{item['name']}}</p>
                 <p style="text-align:left;margin-top:10px"><a :href="item['url']"
                      class="vote"
-                     style="display:inline-block;width:84px;border:1px solid #585656;color:#585656;background:#fff;">投票</a><span style="color:red;font-size:16px;float:right;margin-right:5px">{{item['votenum']}}票</span></p>
+                     style="display:inline-block;width:84px;border:1px solid #585656;color:#585656;background:#fff;">点赞</a><span style="color:red;font-size:16px;float:right;margin-right:5px">{{item['votenum']}}票</span></p>
               </div>
             </div>
           </li>

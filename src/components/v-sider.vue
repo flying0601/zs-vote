@@ -3,7 +3,7 @@
   <div class="swiper-container" v-if="data">
     <div class="swiper-wrapper">
       <div class="swiper-slide" v-for="(item,i) in data" :key="i">
-        <a href="#"><img :src="item" /></a></div>
+        <a :href="item.url"><img :src="item.img" /></a></div>
       </div>
       <div class="swiper-pagination"></div>
     </div>
@@ -19,16 +19,36 @@
 import Swiper from 'swiper'
 export default {
   components: {},
-  props: ['siderData'],
+  props: ['siderData', 'topimgUrl', 'curComp'],
   data () {
     return {
-      data: this.siderData
+      data: []
     }
   },
   computed: {},
-  watch: {},
+  watch: {
+    curComp (val) {
+      // console.log(val)
+    }
+  },
   created () {
-    console.log(this.data)
+    let { siderData, topimgUrl } = this
+    topimgUrl = topimgUrl.split(',')
+    // console.log('topimgUrl: ', topimgUrl)
+    let index = 0
+    for (let key in siderData) {
+      let item = {
+        img: siderData[key]
+      }
+      if (topimgUrl && topimgUrl[index]) {
+        item.url = topimgUrl[index]
+      } else {
+        item.url = ''
+      }
+      siderData[key] && this.data.push(item)
+      index += 1
+    }
+    // console.log(this.data)
   },
   mounted () {
     this.$nextTick(() => {
@@ -36,7 +56,7 @@ export default {
     })
   },
   methods: {
-    initSider () {
+    initSider (playType) {
       let mySwiper = new Swiper('.swiper-container', {
         autoplay: 2000, // 可选选项，自动滑动
         speed: 500,

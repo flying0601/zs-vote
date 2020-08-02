@@ -23,13 +23,13 @@
               <p>奖品</p>
             </div>
           </a></li>
-        <!-- <li><a href="javascript:;">
+        <!-- <li><a  @click="clickNav('Vsignup')" :class="{on: currentComponent == 'Vsignup'}">
             <div class='nav'>
               <div class='ib ispr iconfont icon-baoming'></div>
               <p>报名</p>
             </div>
           </a></li> -->
-        <li><a href="./complaint.html" :class="{on: currentComponent == 'Vcomplaint'}">
+        <li><a @click="clickNav('Vcomplaint')" :class="{on: currentComponent == 'Vcomplaint'}">
             <div class='nav'>
               <div class='is ispr'
                   id="zanzhu2" :style="`background-image: url('app/WeChat/GiftVote/img/ts.png');`"></div>
@@ -71,6 +71,11 @@ export default {
   },
   methods: {
     clickNav (name) {
+      if (name === 'Vcomplaint') {
+        let urlParam = window.location.search
+        window.location.href = './complaint.html' + urlParam
+        return false
+      }
       this.$parent.handleSchedule(name)
     }
   },

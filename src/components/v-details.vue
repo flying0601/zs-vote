@@ -1,6 +1,9 @@
 <template>
   <div class='details-box'>
     <div class="" v-if="!currentComponent">
+      <div class="swiper-container" v-if="giftvote && giftvote.topimg && giftvote.topimg.pic_1">
+      <img :src="giftvote.topimg.pic_1">
+      </div>
       <div class="rq"
            v-if="giftvote.config && giftvote.config.rqb">
         <p v-text="`<<网络人气榜>>`"></p>
@@ -114,7 +117,7 @@
              class='l'
              :style="`background-image: url('app/WeChat/GiftVote/img/zuan_01.png')`"
              @click="postHelp()"
-             id="mytoupiao">给ta投票</a>
+             id="mytoupiao">给ta点赞</a>
           <a href="javascript:;"
              v-if="giftvote.config.hb"
              :style="`background-image: url('app/WeChat/GiftVote/img/zuan_05.png')`"
@@ -139,6 +142,7 @@
       <!-- <component  v-if="giftvote && currentComponent" :voteuser="voteuser" ref="hb"  @posterimg="posterimg" :is="currentComponent" ></component> -->
         <v-hb v-if="giftvote && currentComponent"
               :voteuser="voteuser"
+              :guideUrl="guideUrl"
               ref="hb"
               @posterimg="posterimg"></v-hb>
         <van-overlay :show="show"
@@ -180,7 +184,8 @@ export default {
       currentComponent: null,
       rankList: [],
       show: false,
-      hbImg: ''
+      hbImg: '',
+      guideUrl: ''
     }
   },
   computed: {},
@@ -191,8 +196,9 @@ export default {
 
   },
   created () {
-    // console.log(this.giftvote)
-    this.$parent.getData(300, 'vote', 1)
+    // console.log(this.giftvote.topimg.pic_1)
+    this.$parent.getData(this.params.vid, 'vote', 1)
+    this.getGuideUrl()
   },
   mounted () {
 
@@ -215,19 +221,26 @@ export default {
         loadingType: 'spinner'
       })
       let pram = {
-        did: this.params.did
+        did: this.params.did,
+        pid: this.params.vid
       }
       this.$api.postHelp(pram).then(res => {
         // if (!res) return
+        console.log(res)
         toastStart.clear()
-        if (res.data) {
+        if (res && res.errno === 0) {
           Toast.loading({
             message: '点赞成功',
             icon: 'like-o'
           })
           setTimeout(() => {
             this.goSuccess()
-          }, 1200)
+          }, 200)
+        } else {
+          Toast.loading({
+            message: `每人每日只能点赞${res.data}次\n明天再来吧！`,
+            icon: 'warn-o'
+          })
         }
         // console.log('getCensus', pram.vid, res.data)
       })
@@ -258,17 +271,26 @@ export default {
       this.$parent.isSider = true
       this.currentComponent = null
     },
-    backtop () {
-      // document.documentElement.scrollTop = 0
-      // let timer = setInterval(function () {
-      //   let osTop = document.documentElement.scrollTop || document.body.scrollTop
-      //   let ispeed = Math.floor(-osTop / 5)
-      //   document.documentElement.scrollTop = document.body.scrollTop = osTop + ispeed
-      //   this.isTop = true
-      //   if (osTop === 0) {
-      //     clearInterval(timer)
-      //   }
-      // }, 10)
+    getGuideUrl () {
+      let param = {
+        sysid: this.params.sid,
+        use: 3
+      }
+      this.$api.getActiveHost(param).then(res => {
+      // if (!res) return
+        let data = res.data || []
+        if (res.data && res.data.length > 0) {
+          let sysHost = data[0].host
+          let urlParam = window.location.search
+          console.log('urlParam: ', urlParam)
+          urlParam = urlParam.split('#')[0]
+          let protocol = window.location.protocol
+          this.guideUrl = protocol + '//' + sysHost + '/vt/' + urlParam
+          console.log('newUrl: ', this.guideUrl)
+        } else {
+          this.guideUrl = window.location.href.split('#')[0]
+        }
+      })
     }
   },
   destroyed () { }

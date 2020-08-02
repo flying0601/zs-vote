@@ -32,5 +32,11 @@ export default {
   },
   getActiveHost (params) {
     return $http('get', '/host/getActiveHost', params, 0)
+  },
+  postComplaint (params) {
+    return $http('post', '/vote/old/complaint', params, 0)
+  },
+  gettesting (params) {
+    return $http('post', '/vote/old/testing', params, 0)
   }
 }

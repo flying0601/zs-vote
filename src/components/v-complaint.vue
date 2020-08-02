@@ -198,6 +198,7 @@
 */
 import $ from 'jquery'
 import wx from 'weixin-js-sdk'
+import Util from '@/utils/util.js'
 export default {
   components: {},
   data () {
@@ -209,7 +210,13 @@ export default {
   computed: {},
   watch: {},
   created () {
-    console.log($)
+    this.params = {
+      mname: Util.GetQueryString('m'),
+      vid: Util.GetQueryString('v'),
+      sid: Util.GetQueryString('s'),
+      uid: Util.GetQueryString('u'),
+      did: Util.GetQueryString('d')
+    }
   },
   mounted () {
     this.initPage()
@@ -243,11 +250,25 @@ export default {
         $('#step3').html(t).show()
         $('#setp3').show()
         // 提交接口
+        _this.postData()
         console.log('提交接口')
       })
       $(document).on('click', '#successBtn_1', function () {
         // console.log(wx, 'dd')
         wx.closeWindow()
+      })
+    },
+    postData () {
+      let pram = {
+        tid: this.tid,
+        uid: this.params.uid,
+        pid: this.params.vid,
+        action: this.params.mname
+      }
+      this.$api.postComplaint(pram).then(res => {
+        // if (!res) return
+        console.log(res)
+        // console.log('getCensus', pram.vid, res.data)
       })
     }
   },

@@ -36,7 +36,7 @@
 
 export default {
   components: {},
-  props: ['player', 'curPlayer'],
+  props: ['player', 'curPlayer', 'params'],
   data () {
     return {
       rankList: [],
@@ -46,11 +46,12 @@ export default {
   computed: {},
   watch: {
     player (val) {
+      // console.log({ val })
       this.rankList = val
     }
   },
   created () {
-    this.$parent.getData(300, 'vote', 1)
+    this.$parent.getData(this.params.vid, 'vote', 1)
   },
   mounted () {
 
@@ -58,7 +59,7 @@ export default {
   methods: {
     getList () {
       let { currentPage, totalPages } = this.curPlayer
-      console.log('currentPage: ', currentPage)
+      // console.log('currentPage: ', currentPage)
       currentPage += 1
 
       if (currentPage === totalPages || currentPage === totalPages) {
@@ -67,7 +68,7 @@ export default {
         }, 600)
       }
       if (currentPage > totalPages) return false
-      this.$parent.getData(300, 'vote', currentPage)
+      this.$parent.getData(this.params.vid, 'vote', currentPage)
     },
     clickItem (item) {
       this.$parent.goDetails(item)

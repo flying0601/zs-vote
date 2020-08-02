@@ -36,11 +36,11 @@
 import QRCode from 'qrcodejs2'
 import html2canvas from 'html2canvas'
 export default {
-  props: ['voteuser'],
+  props: ['voteuser', 'guideUrl'],
   components: {},
   data () {
     return {
-      text: window.location.href,
+      text: this.guideUrl,
       postcode: true,
       width: '',
       posterImg: '' // 最终生成的海报图片

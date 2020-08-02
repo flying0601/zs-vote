@@ -1,33 +1,43 @@
 
 <template>
   <div class="container container-fill">
-    <v-color v-if="giftvote && giftvote.config"
+    <v-color v-if="giftvote && !isOver && giftvote.config"
              :setting="giftvote.config"></v-color>
-    <component  v-if="giftvote && giftvote.config && giftvote.gonggao" :config="giftvote.config" :gonggao="giftvote.gonggao" :is="'Vadvert'" ></component>
-    <v-sider v-if="giftvote && giftvote.topimg && isSider"
-             :siderData="giftvote.topimg"></v-sider>
+    <component  v-if="giftvote && !isOver && giftvote.config && giftvote.gonggao" :config="giftvote.config" :gonggao="giftvote.gonggao" :is="'Vadvert'" ></component>
+    <v-sider v-if="giftvote && !isOver && giftvote.topimg && isSider"
+             :siderData="giftvote.topimg"
+             :topimgUrl="giftvote.config && giftvote.config.topimgUrl"
+             :curComp="currentComponent"></v-sider>
     <!-- <v-index v-if="giftvote && giftvote.eventrule && false"
              :giftvote="giftvote"></v-index>
     <v-award v-if="giftvote && giftvote.prizemsg"
              :giftvote="giftvote"></v-award> -->
-    <component  v-if="giftvote && currentComponent" :is="currentComponent" :giftvote="giftvote" :player="votePlayer" :curPlayer="curPlayer" :params="params" :voteuser="itemData" :playerCensus="playerCensus">
+    <component  v-if="giftvote && !isOver && currentComponent" :is="currentComponent" :giftvote="giftvote" :player="votePlayer" :curPlayer="curPlayer" :params="params" :voteuser="itemData" :playerCensus="playerCensus">
 </component>
-    <v-footer  v-if="giftvote && isFooter" :curComp="currentComponent"></v-footer>
-     <component  v-if="giftvote && giftvote.config && giftvote.config.mp3" :config="giftvote.config" :is="'Vmap3'" ></component>
-     <component  v-if="giftvote && giftvote.config && giftvote.config.pftx" :config="giftvote.config" :is="'Vpftx'" ></component>
+    <v-footer  v-if="giftvote && !isOver && isFooter" :curComp="currentComponent"></v-footer>
+     <component  v-if="giftvote && !isOver && giftvote.config && giftvote.config.mp3" :config="giftvote.config" :is="'Vmap3'" ></component>
+     <component  v-if="giftvote && !isOver && giftvote.config && giftvote.config.pftx" :config="giftvote.config" :is="'Vpftx'" ></component>
+  <component  v-if="isOver" :player="votePlayer" :params="params" :is="'VOver'" ></component>
+  <v-init v-if="!giftvote && !isOver"></v-init>
   </div>
+
 </template>
 
 <script>
-
+import VInit from '@//components/v-init.vue'
 import VFooter from '@/components/v-footer.vue'
 import VColor from '@/components/v-color.vue'
 import VSider from '@/components/v-sider.vue'
 import wx from 'weixin-js-sdk'
 import Cookies from 'js-cookie'
 import Util from '@/utils/util.js'
+import Vue from 'vue'
+import Dialog from 'vant/lib/dialog'
+import 'vant/lib/dialog/style'
+Vue.use(Dialog)
 export default {
   components: {
+    VInit,
     VFooter,
     VColor,
     VSider,
@@ -61,11 +71,15 @@ export default {
     },
     Vadvert (resolve) {
       require(['@/components/v-advert.vue'], resolve)
+    },
+    VOver (resolve) {
+      require(['@/components/v-over.vue'], resolve)
     }
   },
 
   data () {
     return {
+      isOver: false, // 活动是否结束
       giftvote: null,
       votePlayer: [],
       currentComponent: 'VIndex',
@@ -88,24 +102,16 @@ export default {
     let host = window.location.host
     console.log({ host })
     if (host.includes('localhost:1315')) {
-      Cookies.set('openid', 'ox4NqxP83fAYlQ6QxkLQJqlwssFo')
+      Cookies.set('openid', 'ox4NqxBJzph_VWuwsw7yySwQzC1o')
+    } else {
+      this.$api.gettesting().then(res => {
+      // if (!res) return
+        console.log(res)
+        if (res && res.data) {
+          window.location.href = 'http://h5.actfou.com/110.html'
+        }
+      })
     }
-    // else {
-    //   let sysid = Util.GetQueryString('s')
-    //   this.$api.getActiveHost({ sysid: sysid }).then(res => {
-    //     // if (!res) return
-    //     let data = res.data || []
-    //     if (res.data && res.data.length > 0) {
-    //       let sysHost = data[0].host
-    //       let curUrl = window.location.href.split('#')[0]
-    //       var newUrl = curUrl.replace(host, sysHost)
-    //       console.log('newUrl: ', newUrl)
-    //       window.location.href = newUrl
-    //     } else {
-    //       alert('active host is null')
-    //     }
-    //   })
-    // }
     let openId = Cookies.get('openid')
     console.log('openId: ', openId)
     if (!openId) {
@@ -156,7 +162,7 @@ export default {
   },
   created () {
     console.log('Cookies', Cookies.get('openid'))
-    console.log('created', window.location.href)
+    // console.log('created', window.location.href)
     let initUrl = Cookies.get('initUrl')
     if (!initUrl) {
       this.params = {
@@ -175,7 +181,10 @@ export default {
     this.params && this.params.mname && this.handleSchedule(this.params.mname)
   },
   mounted () {
-
+    if (window.history && window.history.pushState) {
+      history.pushState(null, null, document.URL)
+      window.addEventListener('popstate', this.backChange, false) // false阻止默认事件
+    }
   },
   methods: {
     handleSchedule (name) {
@@ -188,14 +197,21 @@ export default {
         case 'VSuccess':
           this.isSider = false
           break
+        case 'VDetails':
+          this.isSider = false
+          this.isFooter = true
+          break
         default:
           this.isSider = true
           this.isFooter = true
           break
       }
       Util.updUrl('m', name)
+      // 加载分享配置
+      this.wxJsJdk()
     },
     goDetails (item) {
+      this.preComponet = this.currentComponent // 记录上一个模块
       this.itemData = item
       this.handleSchedule('VDetails')
       this.params.did = item.id
@@ -215,9 +231,24 @@ export default {
       this.$api.getVoteInfo(pram).then(res => {
       // if (!res) return
         this.giftvote = res.data
-        document.title = this.giftvote.title
+        document.title = this.giftvote && this.giftvote.title
         // console.log('data', pram.id, res.data)
         this.getConfigData()
+        // 活动是否结束
+        let { voteendtime } = this.giftvote
+        let curTime = Math.round(new Date() / 1000)
+        let timeSapn = voteendtime - curTime
+        console.log('timeSapn: ', timeSapn)
+        if (timeSapn < 0) {
+          this.isOver = true
+          this.giftvote = null
+        }
+        let{ giftvote } = this
+        console.log('object', parseInt(giftvote.status) === 0)
+        if (parseInt(giftvote.status) === 0) {
+          this.isOver = true
+          this.giftvote = null
+        }
       })
     },
     playerInfo () {
@@ -320,19 +351,19 @@ export default {
         link: shareContent.Link,
         imgUrl: shareContent.imgUrl,
         success: function () {
-          console.log({
-            mes: '分享成功！',
-            timeout: 1500,
-            icon: 'success'
-          })
+          // console.log({
+          //   mes: '分享成功！',
+          //   timeout: 1500,
+          //   icon: 'success'
+          // })
         },
         cancel: function () {
           // 用户取消分享后执行的回调函数
-          console.log({
-            mes: '分享失败',
-            timeout: 1500,
-            icon: 'success'
-          })
+          // console.log({
+          //   mes: '分享失败',
+          //   timeout: 1500,
+          //   icon: 'success'
+          // })
         }
       }
     },
@@ -364,7 +395,48 @@ export default {
       }
       console.log('ddd', shareObj)
       return shareObj
+    },
+    backChange () {
+      // const that = this
+      console.log('监听到了')
+      let { currentComponent, preComponet } = this
+      switch (currentComponent) {
+        case 'VIndex':
+          Dialog.confirm({
+            // title: '标题',
+            message: '是否确定退出?'
+          })
+            .then(() => {
+              // on confirm
+              wx.closeWindow()
+            })
+            .catch(() => {
+              // on cancel
+            })
+          break
+        case 'VAward':
+          this.handleSchedule('VIndex')
+          break
+        case 'Vrank':
+          this.handleSchedule('VIndex')
+          break
+        case 'VDetails':
+          preComponet = preComponet || 'VIndex'
+          this.handleSchedule(preComponet)
+          break
+        case 'VSuccess':
+          this.goDetails(this.itemData)
+          break
+        case 'VGive':
+          this.goDetails(this.itemData)
+          break
+        default:
+          break
+      }
     }
+  },
+  destroyed () {
+    window.removeEventListener('popstate', this.backChange, false) // false阻止默认事件
   }
 }
 </script>

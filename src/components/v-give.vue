@@ -220,17 +220,10 @@ export default {
             signType: res.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
             paySign: res.paySign, // 支付签名
             success: function (res) {
-              alert(res.err_msg)
               // 成功
-              if (res.err_msg === 'get_brand_wcpay_request:ok') {
-                // 使用以上方式判断前端返回,微信团队郑重提示：
-                // res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
-                // alert('支付成功')
-                alert('支付成功')
-                setTimeout(() => {
-                  _this.$parent.goDetails(_this.voteuser)
-                }, 1000)
-              }
+              console.log('支付成功', res)
+              alert('支付成功')
+              _this.$parent.goDetails(_this.voteuser)
             },
             cancel: function () {
               // 取消
@@ -240,7 +233,7 @@ export default {
             fail: function (res) {
               // 失败
               console.log('pay-fail', res)
-              // alert('支付失败')
+              alert('支付环境出错！')
             }
           })
         }
