@@ -21,8 +21,8 @@ const CompressionWebpackPlugin = require('compression-webpack-plugin')
 const gzipSourceList = ['css', 'js']
 const Timestamp = new Date().getTime()
 module.exports = {
-  publicPath: '/vt/',
-  outputDir: './dist/vt/', // build path
+  publicPath: '/vote/',
+  outputDir: './dist/vote/', // build path
   pages: pages, // more pages config
   productionSourceMap: true, // don·t use map
   devServer: {
@@ -35,8 +35,8 @@ module.exports = {
     proxy: {
       '/api': {
         // 测试环境
-        // target: 'http://zsapi.i-active.cn',
-        target: 'http://127.0.0.1:8390',
+        target: 'http://zsapi.i-active.cn',
+        // target: 'http://127.0.0.1:8390',
         changeOrigin: true // 是否跨域
       }
     }

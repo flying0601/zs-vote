@@ -30,15 +30,11 @@
                 编号：{{voteuser.noid}}</div>
               <div style="clear:both"></div>
               <div style="margin-top:5px">
-                <div v-if="voteuser.details">
-                  自我介绍:
-                  {{voteuser.details}}
+                <div v-if="voteuser.details" v-html="'自我介绍:'+voteuser.details">
                 </div>
               </div>
               <div v-if="giftvote.xs_js">
-                <p style="margin-top:5px">
-
-                  {{giftvote.xs_js}}：{{voteuser.introduction}}
+                <p style="margin-top:5px" v-html="giftvote.xs_js+'：'+voteuser.introduction" >
                 </p>
 
               </div>
@@ -222,7 +218,8 @@ export default {
       })
       let pram = {
         did: this.params.did,
-        pid: this.params.vid
+        pid: this.params.vid,
+        userid: this.params.uid
       }
       this.$api.postHelp(pram).then(res => {
         // if (!res) return

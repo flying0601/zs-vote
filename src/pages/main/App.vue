@@ -34,6 +34,9 @@ import Util from '@/utils/util.js'
 import Vue from 'vue'
 import Dialog from 'vant/lib/dialog'
 import 'vant/lib/dialog/style'
+import Toast from 'vant/lib/toast'
+import 'vant/lib/toast/style'
+Vue.use(Toast)
 Vue.use(Dialog)
 export default {
   components: {
@@ -62,6 +65,9 @@ export default {
     },
     VSuccess (resolve) {
       require(['@/components/v-success.vue'], resolve)
+    },
+    Vsignup (resolve) {
+      require(['@/components/v-signup.vue'], resolve)
     },
     Vmap3 (resolve) {
       require(['@/components/v-mp3.vue'], resolve)
@@ -95,10 +101,26 @@ export default {
         sid: null,
         uid: null,
         did: null
-      }
+      },
+      sdkConfig: null,
+      shareContent: null
     }
   },
   beforeCreate () {
+    // 分享链接特殊处理
+    let shareKey = Util.GetQueryString('key')
+    if (shareKey) {
+      // var encodeData = window.btoa('name=xiaoming&age=10')// 编码
+      // encodeData = encodeURIComponent(encodeData)
+      // console.log('encodeData: ', encodeData)
+      let linkKey = decodeURIComponent(shareKey)
+      linkKey = window.atob(linkKey)
+      let initShareUrl = window.location.href.split('#')[0]
+      let baseUrl = initShareUrl.split('?')[0]
+      console.log('decodeData: ', baseUrl + '?' + linkKey)
+      window.location.href = baseUrl + '?' + linkKey
+    }
+    // 测试环境用的
     let host = window.location.host
     console.log({ host })
     if (host.includes('localhost:1315')) {
@@ -177,14 +199,16 @@ export default {
     console.log('params', this.params)
     this.params && this.params.sid && this.voteInfo()
 
-    !this.itemData && this.params.did && (this.params.mname === 'VDetails' || this.params.mname === 'VGive' || this.params.mname === 'VSuccess') && this.playerInfo()
-    this.params && this.params.mname && this.handleSchedule(this.params.mname)
+    !this.itemData && this.params.did && (this.params.mname === 'VDetails' || this.params.mname === 'VGive' || this.params.mname === 'VSuccess') && this.playerInfo('init')
+    //  this.params && this.params.mname && this.handleSchedule(this.params.mname)
   },
   mounted () {
     if (window.history && window.history.pushState) {
       history.pushState(null, null, document.URL)
       window.addEventListener('popstate', this.backChange, false) // false阻止默认事件
     }
+
+    // this.getShareCensus()
   },
   methods: {
     handleSchedule (name) {
@@ -197,6 +221,9 @@ export default {
         case 'VSuccess':
           this.isSider = false
           break
+        case 'Vsignup':
+          this.isSider = false
+          break
         case 'VDetails':
           this.isSider = false
           this.isFooter = true
@@ -207,8 +234,8 @@ export default {
           break
       }
       Util.updUrl('m', name)
-      // 加载分享配置
-      this.wxJsJdk()
+      // 加载分享内容
+      this.sdkConfig && this.getConfig(this.sdkConfig)
     },
     goDetails (item) {
       this.preComponet = this.currentComponent // 记录上一个模块
@@ -217,6 +244,7 @@ export default {
       this.params.did = item.id
       this.playerInfo()
       Util.updUrl('d', item.id)
+      this.sdkConfig && this.getConfig(this.sdkConfig)
     },
     goGive (item) {
       this.handleSchedule('VGive')
@@ -251,13 +279,15 @@ export default {
         }
       })
     },
-    playerInfo () {
+    playerInfo (data) {
+      this.type = data
       let pram = {
         id: this.params.did
       }
       this.$api.getVotePlayerInfo(pram).then(res => {
       // if (!res) return
         this.itemData = res.data
+        this.type && this.handleSchedule('VDetails')
         this.postPlayerCensus()
         // console.log('itemData', pram.id, res.data)
       })
@@ -273,12 +303,20 @@ export default {
         // console.log(this.playerCensus)
       })
     },
-    getData (pid = 300, order = 'vote', page = 1, size = 10) {
+    getData (pid = 300, order = 'vote', page = 1, searchKey, size = 10) {
       let pram = {
         pid: pid,
         page: page,
         size: size,
         order: order
+      }
+      console.log('searchKey')
+      if (searchKey) {
+        if (this.isNaN(searchKey)) {
+          pram.noid = searchKey
+        } else {
+          pram.name = searchKey
+        }
       }
       this.$api.getVotePlayer(pram).then(res => {
         this.curPlayer = res.data
@@ -292,17 +330,16 @@ export default {
         // console.log('votePlayer', res.data)
       })
     },
+    isNaN (value) {
+      let reg = /\d/
+      return reg.test(value)
+    },
     getConfigData () {
       let pram = { url: window.location.href.split('#')[0], sysid: this.params.sid }
       this.$api.getConfig(pram).then(res => {
       // if (!res) return
         // console.log('getConfig', res.data)
-        res && res.data && this.getConfig(res.data)
-      })
-      this.$nextTick(() => {
-        wx.ready(() => {
-          this.wxJsJdk()
-        })
+        res && res.data && (this.sdkConfig = res.data) && this.getConfig(res.data)
       })
     },
     // 微信分享
@@ -319,55 +356,17 @@ export default {
           'chooseWXPay'// 微信支付
         ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
       })
-      wx.error(function (result) {
-        // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
-        console.log(result + '测试报错，上线后就可以修复')
+      const toastStart = Toast.loading({
+        message: '加载中...',
+        duration: 0,
+        loadingType: 'spinner'
       })
-    },
-    wxJsJdk () {
-      wx.ready(() => {
-        // 分享给朋友
-        wx.updateAppMessageShareData(this.winxin())
-        // 分享到朋友圈
-        wx.updateTimelineShareData(this.winxin())
-      })
-    },
-    weixinShare () {
-      // 分享到朋友圈
-      console.log('updateTimelineShareData 朋友圈')
-      wx.updateTimelineShareData(this.winxin())
-    },
-    weixinShareFirend () {
-      // 分享给朋友
-      console.log('updateAppMessageShareData 微信朋友')
-      wx.updateAppMessageShareData(this.winxin())
-    },
-    winxin () {
-      let shareContent = this.shareContent()
-      // console.log('shareContent: ', shareContent)
-      return {
-        title: shareContent.title,
-        desc: shareContent.content,
-        link: shareContent.Link,
-        imgUrl: shareContent.imgUrl,
-        success: function () {
-          // console.log({
-          //   mes: '分享成功！',
-          //   timeout: 1500,
-          //   icon: 'success'
-          // })
-        },
-        cancel: function () {
-          // 用户取消分享后执行的回调函数
-          // console.log({
-          //   mes: '分享失败',
-          //   timeout: 1500,
-          //   icon: 'success'
-          // })
-        }
-      }
-    },
-    shareContent () {
+      let initShareUrl = window.location.href.split('#')[0]
+      console.log('initShareUrl: ', initShareUrl)
+      let key = initShareUrl.split('?')[1]
+      key = window.btoa(key)// 编码
+      key = encodeURIComponent(key) // url编码
+      let newShareUrl = initShareUrl.split('?')[0] + '?key=' + key
       let { giftvote, itemData } = this
       let shareObj
       if (this.currentComponent === 'VDetails' && giftvote) {
@@ -381,20 +380,69 @@ export default {
         }
         shareObj = {
           imgUrl: itemData['img1'],
-          Link: window.location.href.split('#')[0],
+          Link: newShareUrl,
           title: giftvote['item_sharetitle'],
           content: content
         }
       } else {
         shareObj = {
-          imgUrl: giftvote['shareimg'],
-          Link: window.location.href.split('#')[0],
-          title: giftvote['sharetitle'],
-          content: giftvote['sharedesc']
+          imgUrl: giftvote && giftvote['shareimg'],
+          Link: newShareUrl,
+          title: giftvote && giftvote['sharetitle'],
+          content: giftvote && giftvote['sharedesc']
         }
       }
       console.log('ddd', shareObj)
-      return shareObj
+      this.shareContent = shareObj
+      toastStart.clear()
+      let { shareContent } = this
+      let _this = this
+      wx.ready(() => {
+        // 分享给朋友
+        // wx.updateAppMessageShareData(this.winxin())
+        wx.updateAppMessageShareData({
+          title: shareContent.title,
+          desc: shareContent.content,
+          link: shareContent.Link,
+          imgUrl: shareContent.imgUrl,
+          success: function () {
+            // 设置成功
+            console.log('朋友设置成功', shareContent)
+            _this.getShareCensus()
+          }
+        })
+        // 分享到朋友圈
+        // wx.updateTimelineShareData(this.winxin())
+        wx.updateTimelineShareData({
+          title: shareContent.title,
+          desc: shareContent.content,
+          link: shareContent.Link,
+          imgUrl: shareContent.imgUrl,
+          success: function () {
+            // 设置成功
+            console.log('朋友圈设置成功', shareContent)
+            _this.getShareCensus()
+          }
+        })
+      })
+      wx.error(function (result) {
+        // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+        console.log(result + '测试报错，上线后就可以修复')
+      })
+    },
+    getShareCensus () {
+      let pram = {
+        id: this.params.vid
+      }
+      if (this.currentComponent === 'VDetails') {
+        pram.did = this.params.did
+      }
+      this.$api.getShare(pram).then(res => {
+        console.log('分享统计:', res.data)
+      })
+    },
+    getShareContent () {
+
     },
     backChange () {
       // const that = this

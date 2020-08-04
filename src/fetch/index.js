@@ -32,7 +32,34 @@ function $http (type, url, params, status, baseURL = root) {
     })
   })
 }
-
+function $file (type, url, params, status, baseURL = root) {
+  return new Promise((resolve, reject) => {
+    let postParams = {}
+    const instance = axios.create({
+      timeout: 30000
+    })
+    postParams = params
+    let fetchData = {
+      method: type,
+      url: `${baseURL}${url}`,
+      data: postParams,
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    }
+    instance(fetchData).then(response => {
+      const res = response.data
+      if (res.errno === status) {
+        resolve(res)
+      } else {
+        resolve(res)
+      }
+    }).catch(error => {
+      reject(error)
+    })
+  })
+}
 export {
-  $http
+  $http,
+  $file
 }

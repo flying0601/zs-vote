@@ -1,4 +1,4 @@
-import { $http } from './index'
+import { $http, $file } from './index'
 export default {
   getConfig (params) {
     return $http('post', '/wechat/getConfig', params, 0)
@@ -38,5 +38,11 @@ export default {
   },
   gettesting (params) {
     return $http('post', '/vote/old/testing', params, 0)
+  },
+  postUpload (params) {
+    return $file('post', '/upload/qiniu', params, 0)
+  },
+  getShare (params) {
+    return $http('get', '/vote/old/share', params, 0)
   }
 }

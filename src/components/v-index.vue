@@ -30,8 +30,9 @@
                  value=""
                  name="sci"
                  placeholder="请输入编号或姓名"
+                 v-model="searchKey"
                  class="inputtxt">
-          <div class="divsub"><i class="glyphicon glyphicon-search"></i>&nbsp;&nbsp;搜索</div>
+          <div class="divsub" @click="clickSearch()"><i class="glyphicon glyphicon-search"></i>&nbsp;&nbsp;搜索</div>
         </div>
 
         <div class="threebutton">
@@ -119,7 +120,8 @@ export default {
         votenum: 0,
         playernum: 0
       },
-      getListText: '查看更多'
+      getListText: '查看更多',
+      searchKey: null
     }
   },
   computed: {
@@ -208,6 +210,21 @@ export default {
       if (currentPage > totalPages) return false
       this.$parent.getData(this.params.vid, 'vote', currentPage)
     },
+    clickSearch () {
+      let { searchKey } = this
+      console.log('searchKey', searchKey)
+      if (searchKey) {
+        this.$parent.getData(this.params.vid, 'vote', 1, searchKey)
+        let { votePlayer } = this
+        if (votePlayer && votePlayer.length === 0) {
+          this.getListText = '没有搜索到内容！'
+        } else {
+          this.getListText = '没有更多记录！'
+        }
+      } else {
+        this.$parent.getData(this.params.vid, 'vote', 1)
+      }
+    },
     getCensus () {
       let pram = {
         vid: this.params.vid
@@ -218,6 +235,7 @@ export default {
         // console.log('getCensus', pram.vid, res.data)
       })
     }
+
   },
   destroyed () { }
 }
