@@ -256,7 +256,7 @@ export default {
     getHb (name) {
       document.documentElement.scrollTop = 0
       this.currentComponent = name
-      this.$parent.isSider = false
+      // this.$parent.isSider = false
       console.log('this.currentComponent')
     },
     showHb () {
@@ -265,7 +265,7 @@ export default {
     posterimg (val) {
       this.hbImg = val
       this.showHb()
-      this.$parent.isSider = true
+      // this.$parent.isSider = true
       this.currentComponent = null
     },
     getGuideUrl () {

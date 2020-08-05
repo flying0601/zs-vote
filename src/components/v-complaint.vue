@@ -259,11 +259,28 @@ export default {
       })
     },
     postData () {
+      let mname = this.params.mname
+
+      switch (mname) {
+        case 'VAward':
+          this.action = 'award'
+          break
+        case 'Vrank':
+          this.action = 'ranklist'
+          break
+        case 'VDetails':
+          this.action = 'detail'
+          break
+        default:
+          this.action = 'index'
+          break
+      }
       let pram = {
         tid: this.tid,
         uid: this.params.uid,
         pid: this.params.vid,
-        action: this.params.mname
+        did: this.params.did,
+        action: this.action
       }
       this.$api.postComplaint(pram).then(res => {
         // if (!res) return

@@ -103,7 +103,8 @@ export default {
         did: null
       },
       sdkConfig: null,
-      shareContent: null
+      shareContent: null,
+      shareType: 'old'
     }
   },
   beforeCreate () {
@@ -126,7 +127,7 @@ export default {
     if (host.includes('localhost:1315')) {
       Cookies.set('openid', 'ox4NqxBJzph_VWuwsw7yySwQzC1o')
     } else {
-      this.$api.gettesting().then(res => {
+      Cookies.get('sysid') && this.$api.gettesting().then(res => {
       // if (!res) return
         console.log(res)
         if (res && res.data) {
@@ -177,11 +178,7 @@ export default {
       }
     }
   },
-  watch: {
-    itemData (val) {
-
-    }
-  },
+  watch: {},
   created () {
     console.log('Cookies', Cookies.get('openid'))
     // console.log('created', window.location.href)
@@ -344,6 +341,7 @@ export default {
     },
     // 微信分享
     getConfig (data) {
+      let _this = this
       wx.config({
         debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
         appId: data.appId, // ', // 必填，公众号的唯一标识
@@ -351,8 +349,8 @@ export default {
         nonceStr: data.nonceStr, // 必填，生成签名的随机串
         signature: data.signature, // 必填，签名，见附录1
         jsApiList: [
-          'updateTimelineShareData', // 分享到朋友圈
-          'updateAppMessageShareData', // 分享给朋友
+          'onMenuShareTimeline', // 旧分享到朋友圈
+          'onMenuShareAppMessage', // 旧分享给朋友
           'chooseWXPay'// 微信支付
         ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
       })
@@ -396,35 +394,36 @@ export default {
       this.shareContent = shareObj
       toastStart.clear()
       let { shareContent } = this
-      let _this = this
+      // console.log('分享方式:', _this.shareType)
+      // 分享给朋友
+      // wx.updateAppMessageShareData(this.winxin())
       wx.ready(() => {
-        // 分享给朋友
-        // wx.updateAppMessageShareData(this.winxin())
-        wx.updateAppMessageShareData({
+        wx.onMenuShareAppMessage({
           title: shareContent.title,
           desc: shareContent.content,
           link: shareContent.Link,
           imgUrl: shareContent.imgUrl,
           success: function () {
             // 设置成功
-            console.log('朋友设置成功', shareContent)
+            console.log('old朋友设置成功', shareContent)
             _this.getShareCensus()
           }
         })
         // 分享到朋友圈
         // wx.updateTimelineShareData(this.winxin())
-        wx.updateTimelineShareData({
+        wx.onMenuShareTimeline({
           title: shareContent.title,
           desc: shareContent.content,
           link: shareContent.Link,
           imgUrl: shareContent.imgUrl,
           success: function () {
             // 设置成功
-            console.log('朋友圈设置成功', shareContent)
+            console.log('old朋友圈设置成功', shareContent)
             _this.getShareCensus()
           }
         })
       })
+
       wx.error(function (result) {
         // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
         console.log(result + '测试报错，上线后就可以修复')

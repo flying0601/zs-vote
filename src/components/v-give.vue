@@ -222,18 +222,18 @@ export default {
             success: function (res) {
               // 成功
               console.log('支付成功', res)
-              alert('支付成功')
+              // alert('支付成功')
               _this.$parent.goDetails(_this.voteuser)
             },
-            cancel: function () {
+            cancel: function (res) {
               // 取消
-              console.log('cancel-pay')
+              console.log('cancel-pay', res)
               // alert('支付取消')
             },
             fail: function (res) {
               // 失败
               console.log('pay-fail', res)
-              alert('支付环境出错！')
+              alert('支付失败！')
             }
           })
         }
