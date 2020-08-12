@@ -36,7 +36,7 @@ export default {
   postComplaint (params) {
     return $http('post', '/vote/old/complaint', params, 0)
   },
-  gettesting (params) {
+  getTesting (params) {
     return $http('post', '/vote/old/testing', params, 0)
   },
   postUpload (params) {
@@ -44,5 +44,8 @@ export default {
   },
   getShare (params) {
     return $http('get', '/vote/old/share', params, 0)
+  },
+  postSginup (params) {
+    return $http('post', '/vote/old/signup', params, 0)
   }
 }

@@ -207,7 +207,8 @@ export default {
         gifttitle: this.subGive.gifttitle,
         gificon: this.subGive.gifticon,
         fee: this.subGive.giftprice,
-        giftvote: this.subGive.giftvote
+        giftvote: this.subGive.giftvote,
+        body: `为${this.voteuser.name}送礼物`
       }
       this.$api.postGive(prams).then(result => {
       // if (!res) return

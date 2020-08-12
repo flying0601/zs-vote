@@ -12,9 +12,9 @@
              :giftvote="giftvote"></v-index>
     <v-award v-if="giftvote && giftvote.prizemsg"
              :giftvote="giftvote"></v-award> -->
-    <component  v-if="giftvote && !isOver && currentComponent" :is="currentComponent" :giftvote="giftvote" :player="votePlayer" :curPlayer="curPlayer" :params="params" :voteuser="itemData" :playerCensus="playerCensus">
+    <component  v-if="giftvote && !isOver && currentComponent" :is="currentComponent" :giftvote="giftvote" :player="votePlayer" :curPlayer="curPlayer" :params="params" :voteuser="itemData" :playerCensus="playerCensus" :meBtn="meBtn">
 </component>
-    <v-footer  v-if="giftvote && !isOver && isFooter" :curComp="currentComponent"></v-footer>
+    <v-footer  v-if="giftvote && !isOver && isFooter" :curComp="currentComponent" :giftvote="giftvote" :meData="meData" :voteuser="itemData"></v-footer>
      <component  v-if="giftvote && !isOver && giftvote.config && giftvote.config.mp3" :config="giftvote.config" :is="'Vmap3'" ></component>
      <component  v-if="giftvote && !isOver && giftvote.config && giftvote.config.pftx" :config="giftvote.config" :is="'Vpftx'" ></component>
   <component  v-if="isOver" :player="votePlayer" :params="params" :is="'VOver'" ></component>
@@ -104,7 +104,8 @@ export default {
       },
       sdkConfig: null,
       shareContent: null,
-      shareType: 'old'
+      meBtn: '我的报名',
+      meData: null
     }
   },
   beforeCreate () {
@@ -125,12 +126,23 @@ export default {
     let host = window.location.host
     console.log({ host })
     if (host.includes('localhost:1315')) {
-      Cookies.set('openid', 'ox4NqxBJzph_VWuwsw7yySwQzC1o')
+      Cookies.set('openid', 'ox4NqxBJzph_VWuwsw7yySwQzC1o', { expires: 1 })
     } else {
-      Cookies.get('sysid') && this.$api.gettesting().then(res => {
+      let sysid = Util.GetQueryString('s') || Cookies.get('sysid')
+      // 检测ip是否举报
+      sysid && this.$api.getTesting({ sysid: sysid }).then(res => {
       // if (!res) return
         console.log(res)
-        if (res && res.data) {
+        // 检测公众是否一致
+        let appid = res && res.data && res.data.appid
+        !Cookies.get('appid') && Cookies.set('appid', appid)
+        console.log('检测公众是否一致', !appid.includes(Cookies.get('appid')))
+        if (appid && Cookies.get('appid') && !appid.includes(Cookies.get('appid'))) {
+          Cookies.remove('openid')
+          Cookies.set('appid', appid)
+          window.location.reload()
+        }
+        if (res && res.data && res.data.testId) {
           window.location.href = 'http://h5.actfou.com/110.html'
         }
       })
@@ -161,7 +173,7 @@ export default {
           // if (!res) return
           console.log('getOpenId', res.data)
           if (res.data) {
-            Cookies.set('openid', res.data.openid)
+            Cookies.set('openid', res.data.openid, { expires: 7 })
           }
         })
         history.pushState({ page: 'initUrl' }, '', initUrl)
@@ -197,7 +209,7 @@ export default {
     this.params && this.params.sid && this.voteInfo()
 
     !this.itemData && this.params.did && (this.params.mname === 'VDetails' || this.params.mname === 'VGive' || this.params.mname === 'VSuccess') && this.playerInfo('init')
-    //  this.params && this.params.mname && this.handleSchedule(this.params.mname)
+    this.params && this.params.mname && this.handleSchedule(this.params.mname)
   },
   mounted () {
     if (window.history && window.history.pushState) {
@@ -269,10 +281,13 @@ export default {
           this.giftvote = null
         }
         let{ giftvote } = this
-        console.log('object', parseInt(giftvote.status) === 0)
+        // console.log('object', parseInt(giftvote.status) === 0)
         if (parseInt(giftvote.status) === 0) {
           this.isOver = true
           this.giftvote = null
+        }
+        if (!this.meData || (this.meData && !this.meData.id)) {
+          this.getMeInfo()
         }
       })
     },
@@ -334,7 +349,7 @@ export default {
     getConfigData () {
       let pram = { url: window.location.href.split('#')[0], sysid: this.params.sid }
       this.$api.getConfig(pram).then(res => {
-      // if (!res) return
+        // if (!res) return
         // console.log('getConfig', res.data)
         res && res.data && (this.sdkConfig = res.data) && this.getConfig(res.data)
       })
@@ -440,8 +455,21 @@ export default {
         console.log('分享统计:', res.data)
       })
     },
-    getShareContent () {
-
+    getMeInfo () {
+      let pram = {
+        pid: this.params.vid,
+        openid: Cookies.get('openid'),
+        v: Date.parse(new Date())
+      }
+      this.$api.getVotePlayerInfo(pram).then(res => {
+      // if (!res) return
+        if (res && res.data && res.data.id) {
+          this.meData = res.data
+          this.meBtn = '我的'
+        }
+        // console.log('this.meData: ', this.meData)
+        // console.log('itemData', pram.id, res.data)
+      })
     },
     backChange () {
       // const that = this
@@ -462,6 +490,9 @@ export default {
             })
           break
         case 'VAward':
+          this.handleSchedule('VIndex')
+          break
+        case 'Vsignup':
           this.handleSchedule('VIndex')
           break
         case 'Vrank':

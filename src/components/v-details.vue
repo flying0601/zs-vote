@@ -113,7 +113,7 @@
              class='l'
              :style="`background-image: url('app/WeChat/GiftVote/img/zuan_01.png')`"
              @click="postHelp()"
-             id="mytoupiao">给ta点赞</a>
+             id="mytoupiao">给ta投票</a>
           <a href="javascript:;"
              v-if="giftvote.config.hb"
              :style="`background-image: url('app/WeChat/GiftVote/img/zuan_05.png')`"
@@ -165,6 +165,7 @@ import 'vant/lib/toast/style'
 import Overlay from 'vant/lib/overlay'
 import 'vant/lib/overlay/style'
 import VHb from '@/components/v-hb.vue'
+import dataFormat from '@/assets/js/format-time.js'
 Vue.use(Toast)
 Vue.use(Overlay)
 export default {
@@ -210,6 +211,15 @@ export default {
       this.$parent.goDetails(item)
     },
     postHelp () {
+      let { giftvote } = this
+      let { votestarttime } = giftvote
+      let curTime = Math.round(new Date() / 1000)
+      if (curTime < votestarttime) {
+        return Toast.loading({
+          message: `未开始投票！投票时间为：${dataFormat(giftvote.votestarttime * 1000, 'YYYY-MM-DD HH:mm')}\n至\n${dataFormat(giftvote.voteendtime * 1000, 'YYYY-MM-DD HH:mm')}`,
+          icon: 'warn-o'
+        })
+      }
       const toastStart = Toast.loading({
         message: '加载中...',
         duration: 0,
@@ -227,15 +237,28 @@ export default {
         toastStart.clear()
         if (res && res.errno === 0) {
           Toast.loading({
-            message: '点赞成功',
+            message: '投票成功',
             icon: 'like-o'
           })
           setTimeout(() => {
             this.goSuccess()
           }, 200)
-        } else {
+        }
+        if (res && res.errno === 1000) {
           Toast.loading({
-            message: `每人每日只能点赞${res.data}次\n明天再来吧！`,
+            message: `每人每日只能投票${res.data}次\n明天再来吧！`,
+            icon: 'warn-o'
+          })
+        }
+        if (res && res.errno === 1001) {
+          Toast.loading({
+            message: `选手异常锁定${parseInt(res.data)}秒！`,
+            icon: 'warn-o'
+          })
+        }
+        if (res && res.errno === 1002) {
+          Toast.loading({
+            message: `选手异常禁止了！`,
             icon: 'warn-o'
           })
         }

@@ -70,6 +70,7 @@ export default {
   },
   created () {
     this.$parent.getData(this.params.vid, 'vote', 1)
+    this.$parent.getConfigData()
     console.log('rankList', this.rankList)
   },
   mounted () {

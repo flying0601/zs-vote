@@ -15,12 +15,12 @@
         <div>
           <ul class="fd_list2">
             <li>
-              <div class="tlt">姓名</div>
+              <div class="tlt">名称</div>
               <div class="cont">
                 <input name="name"
                        type="text"
-                       v-model="formObj.xs_name"
-                       placeholder="请输入姓名"
+                       v-model="formObj.name"
+                       placeholder="请输入名称"
                        class="tx"></div>
             </li>
             <li>
@@ -28,7 +28,7 @@
               <div class="cont">
                 <input name="xs_tel"
                        type="text"
-                        v-model="formObj.xs_tel"
+                        v-model="formObj.tel"
                        placeholder="请输入手机号码"
                        class="tx"></div>
             </li>
@@ -36,7 +36,7 @@
               <div class="tlt">参赛宣言</div>
               <div class="cont">
                 <textarea name="introduction"
-                          v-model="formObj.xs_js"
+                          v-model="formObj.introduction"
                           class="ta"
                           cols=""
                           placeholder="请输入参赛宣言"></textarea></div>
@@ -74,11 +74,17 @@
 import Vue from 'vue'
 import Uploader from 'vant/lib/uploader'
 import 'vant/lib/uploader/style'
+import Notify from 'vant/lib/notify'
+import 'vant/lib/notify/style'
+import Toast from 'vant/lib/toast'
+import 'vant/lib/toast/style'
 import { compressImage } from '@/utils/imagesUtils'
 Vue.use(Uploader)
+Vue.use(Notify)
+Vue.use(Toast)
 export default {
   components: {},
-  props: ['giftvote'],
+  props: ['giftvote', 'params'],
   data () {
     return {
       fileList: [
@@ -86,9 +92,9 @@ export default {
       ],
       sucessFile: [],
       formObj: {
-        xs_name: '',
-        xs_tel: '',
-        xs_js: ''
+        name: '',
+        tel: '',
+        introduction: ''
       }
     }
   },
@@ -102,7 +108,7 @@ export default {
     }
   },
   created () {
-
+    console.log(this.giftvote, this.params)
   },
   mounted () {
 
@@ -158,9 +164,49 @@ export default {
       this.sucessFile.splice(index, 1)
     },
     subimtSifnup () {
-      let params = this.formObj
+      let { sucessFile, formObj } = this
+      if (!sucessFile || sucessFile.length < 1) {
+        return Notify({ type: 'warning', message: '请上传图片！' })
+      }
+      if (!sucessFile && sucessFile.length > 5) {
+        return Notify({ type: 'warning', message: '请上传图片小于5！' })
+      }
+      if (formObj && !formObj.name) {
+        return Notify({ type: 'warning', message: '请输入名称' })
+      }
+      if (formObj && !formObj.tel) {
+        return Notify({ type: 'warning', message: '请输入电话号码' })
+      }
+      console.log((/^\d+$/).test(formObj.tel))
+      if (formObj && formObj.tel && !(/^\d+$/).test(formObj.tel)) {
+        return Notify({ type: 'warning', message: '请检查电话号码格式' })
+      }
+      let params = {
+        pid: this.params.vid,
+        userid: this.params.uid,
+        ischecked: this.giftvote.config.ischecked,
+        formObj: JSON.stringify(this.formObj),
+        imglist: JSON.stringify(this.sucessFile)
+      }
+      const toastStart = Toast.loading({
+        message: '加载中...',
+        duration: 0,
+        forbidClick: false,
+        loadingType: 'spinner'
+      })
       console.log(params)
       console.log(this.sucessFile)
+      this.$api.postSginup(params).then(res => {
+        toastStart.clear()
+        if (res && res.errno === 0) {
+          Notify({ type: 'success', message: '报名成功！' })
+          this.$parent.params.did = res.data
+          this.$parent.playerInfo('init')
+        } else {
+          Notify({ type: 'danger', message: '报名失败！' })
+        }
+        console.log(res)
+      })
     }
   },
   destroyed () { }
