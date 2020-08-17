@@ -34,9 +34,6 @@ import Util from '@/utils/util.js'
 import Vue from 'vue'
 import Dialog from 'vant/lib/dialog'
 import 'vant/lib/dialog/style'
-import Toast from 'vant/lib/toast'
-import 'vant/lib/toast/style'
-Vue.use(Toast)
 Vue.use(Dialog)
 export default {
   components: {
@@ -139,7 +136,7 @@ export default {
         console.log('检测公众是否一致', !appid.includes(Cookies.get('appid')))
         if (appid && Cookies.get('appid') && !appid.includes(Cookies.get('appid'))) {
           Cookies.remove('openid')
-          Cookies.set('appid', appid)
+          Cookies.set('appid', appid, { expires: 1 })
           window.location.reload()
         }
         if (res && res.data && res.data.testId) {
@@ -347,6 +344,10 @@ export default {
       return reg.test(value)
     },
     getConfigData () {
+      // 测试start
+      // let newShareUrl = 'http://zsapp.vtfour.wlnikiz.cn/vote/?v=300&u=1&s=2'
+      // let pram = { url: newShareUrl, sysid: this.params.sid }
+      // 测试end
       let pram = { url: window.location.href.split('#')[0], sysid: this.params.sid }
       this.$api.getConfig(pram).then(res => {
         // if (!res) return
@@ -369,17 +370,32 @@ export default {
           'chooseWXPay'// 微信支付
         ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
       })
-      const toastStart = Toast.loading({
-        message: '加载中...',
-        duration: 0,
-        loadingType: 'spinner'
-      })
+
       let initShareUrl = window.location.href.split('#')[0]
       console.log('initShareUrl: ', initShareUrl)
       let key = initShareUrl.split('?')[1]
       key = window.btoa(key)// 编码
       key = encodeURIComponent(key) // url编码
-      let newShareUrl = initShareUrl.split('?')[0] + '?key=' + key
+      console.log(key)
+      // 测试start
+      // let newShareUrl = 'http://test.active.iactive.top/vote/?v=300&u=1&s=2'
+      // 测试end
+      let protocol = window.location.protocol
+      let shareHost
+      let hosts = data.host
+      if (hosts && hosts.length > 0) {
+        let min = 0; let max = hosts.length - 1
+        let index = Math.round((Math.random() * (max - min) + min) * 10) / 10
+        index = Math.round(index)
+        console.log('index: ', index)
+        shareHost = hosts[index].host
+      } else {
+        shareHost = window.location.host
+      }
+      let pathname = window.location.pathname
+      pathname = pathname.replace('main', 'index')
+      let newShareUrl = protocol + '//' + shareHost + pathname + '?key=' + key
+      console.log('newShareUrl: ', newShareUrl)
       let { giftvote, itemData } = this
       let shareObj
       if (this.currentComponent === 'VDetails' && giftvote) {
@@ -407,7 +423,6 @@ export default {
       }
       console.log('ddd', shareObj)
       this.shareContent = shareObj
-      toastStart.clear()
       let { shareContent } = this
       // console.log('分享方式:', _this.shareType)
       // 分享给朋友

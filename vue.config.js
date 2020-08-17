@@ -26,7 +26,7 @@ module.exports = {
   // publicPath: '/vote/',
   // outputDir: './dist/vote/', // build path
   pages: pages, // more pages config
-  productionSourceMap: true, // don·t use map
+  productionSourceMap: false, // don·t use map
   devServer: {
     port: 1315, // port
     open: true, // default browser
@@ -47,7 +47,7 @@ module.exports = {
   configureWebpack: config => {
     // open gzip
     if (process.env.NODE_ENV === 'production') {
-      config.optimization.minimizer[0].options.terserOptions.compress.drop_console = false
+      config.optimization.minimizer[0].options.terserOptions.compress.drop_console = true
       return {
         plugins: [
           new CompressionWebpackPlugin({

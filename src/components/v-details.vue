@@ -104,7 +104,7 @@
         </div>
       </div>
       <div class='vsav'>
-        <div class='vbtn_tnk'><a href="">我也要参加</a></div>
+        <div class='vbtn_tnk' @click="toSignup()">{{meBtn}}</div>
       </div>
       <div class="bg-purple3 bg-blue3 mg-t-40"
            style="height:144px;"></div>
@@ -166,10 +166,11 @@ import Overlay from 'vant/lib/overlay'
 import 'vant/lib/overlay/style'
 import VHb from '@/components/v-hb.vue'
 import dataFormat from '@/assets/js/format-time.js'
+import Bus from '@/utils/Bus.js'
 Vue.use(Toast)
 Vue.use(Overlay)
 export default {
-  props: ['giftvote', 'voteuser', 'player', 'params', 'playerCensus'],
+  props: ['giftvote', 'voteuser', 'player', 'params', 'playerCensus', 'meBtn'],
   components: {
     VHb
     // VHb (resolve) {
@@ -212,11 +213,17 @@ export default {
     },
     postHelp () {
       let { giftvote } = this
-      let { votestarttime } = giftvote
+      let { votestarttime, voteendtime } = giftvote
       let curTime = Math.round(new Date() / 1000)
       if (curTime < votestarttime) {
         return Toast.loading({
           message: `未开始投票！投票时间为：${dataFormat(giftvote.votestarttime * 1000, 'YYYY-MM-DD HH:mm')}\n至\n${dataFormat(giftvote.voteendtime * 1000, 'YYYY-MM-DD HH:mm')}`,
+          icon: 'warn-o'
+        })
+      }
+      if (curTime > voteendtime) {
+        return Toast.loading({
+          message: `已结束投票！投票时间为：${dataFormat(giftvote.votestarttime * 1000, 'YYYY-MM-DD HH:mm')}\n至\n${dataFormat(giftvote.voteendtime * 1000, 'YYYY-MM-DD HH:mm')}`,
           icon: 'warn-o'
         })
       }
@@ -311,6 +318,9 @@ export default {
           this.guideUrl = window.location.href.split('#')[0]
         }
       })
+    },
+    toSignup () {
+      Bus.$emit('toSignup', 'toSignup')
     }
   },
   destroyed () { }
