@@ -14,7 +14,7 @@
              :giftvote="giftvote"></v-award> -->
     <component  v-if="giftvote && !isOver && currentComponent" :is="currentComponent" :giftvote="giftvote" :player="votePlayer" :curPlayer="curPlayer" :params="params" :voteuser="itemData" :playerCensus="playerCensus" :meBtn="meBtn">
 </component>
-    <v-footer  v-if="giftvote && !isOver && isFooter" :curComp="currentComponent" :giftvote="giftvote" :meData="meData" :voteuser="itemData"></v-footer>
+    <v-footer ref="footerDom" v-if="giftvote && !isOver && isFooter" :curComp="currentComponent" :giftvote="giftvote" :meData="meData" :voteuser="itemData"></v-footer>
      <component  v-if="giftvote && !isOver && giftvote.config && giftvote.config.mp3" :config="giftvote.config" :is="'Vmap3'" ></component>
      <component  v-if="giftvote && !isOver && giftvote.config && giftvote.config.pftx" :config="giftvote.config" :is="'Vpftx'" ></component>
   <component  v-if="isOver" :player="votePlayer" :params="params" :is="'VOver'" ></component>
@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import VInit from '@//components/v-init.vue'
+import VInit from '@/components/v-init.vue'
 import VFooter from '@/components/v-footer.vue'
 import VColor from '@/components/v-color.vue'
 import VSider from '@/components/v-sider.vue'
@@ -42,11 +42,11 @@ export default {
     VColor,
     VSider,
     VAward (resolve) {
-      let date = new Date()
-      console.log(date.valueOf())
+      // let date = new Date()
+      // console.log(date.valueOf())
       require(['@/components/v-award.vue'], resolve)
-      let dates = new Date()
-      console.log(dates.valueOf())
+      // let dates = new Date()
+      // console.log(dates.valueOf())
     },
     VIndex (resolve) {
       require(['@/components/v-index.vue'], resolve)
@@ -113,14 +113,14 @@ export default {
       // encodeData = encodeURIComponent(encodeData)
       // console.log('encodeData: ', encodeData)
       let linkKey = decodeURIComponent(shareKey)
-      linkKey = window.atob(linkKey)
-      let initShareUrl = window.location.href.split('#')[0]
+      // linkKey = window.atob(linkKey)
+      let initShareUrl = location.href.split('#')[0]
       let baseUrl = initShareUrl.split('?')[0]
       console.log('decodeData: ', baseUrl + '?' + linkKey)
-      window.location.href = baseUrl + '?' + linkKey
+      location.href = baseUrl + '?' + linkKey
     }
     // 测试环境用的
-    let host = window.location.host
+    let host = location.host
     console.log({ host })
     if (host.includes('localhost:1315')) {
       Cookies.set('openid', 'ox4NqxBJzph_VWuwsw7yySwQzC1o', { expires: 1 })
@@ -137,10 +137,10 @@ export default {
         if (appid && Cookies.get('appid') && !appid.includes(Cookies.get('appid'))) {
           Cookies.remove('openid')
           Cookies.set('appid', appid, { expires: 1 })
-          window.location.reload()
+          location.reload()
         }
         if (res && res.data && res.data.testId) {
-          window.location.href = 'http://h5.actfou.com/110.html'
+          location.href = 'http://h5.actfou.com/110.html'
         }
       })
     }
@@ -150,7 +150,7 @@ export default {
       let code = Util.GetQueryString('code')
       let sysid = Util.GetQueryString('s')
       if (!code) {
-        let initUrl = window.location.href.split('#')[0]
+        let initUrl = location.href.split('#')[0]
         Cookies.set('initUrl', initUrl)
         let pram = {
           callback: initUrl,
@@ -161,7 +161,7 @@ export default {
         this.$api.getUrl(pram).then(res => {
           // / if (!res) return
           console.log(res.data)
-          window.location.href = res.data
+          location.href = res.data
         })
       } else {
         let initUrl = Cookies.get('initUrl')
@@ -190,7 +190,7 @@ export default {
   watch: {},
   created () {
     console.log('Cookies', Cookies.get('openid'))
-    // console.log('created', window.location.href)
+    // console.log('created', location.href)
     let initUrl = Cookies.get('initUrl')
     if (!initUrl) {
       this.params = {
@@ -279,7 +279,7 @@ export default {
         }
         let{ giftvote } = this
         // console.log('object', parseInt(giftvote.status) === 0)
-        if (parseInt(giftvote.status) === 0) {
+        if (giftvote && parseInt(giftvote.status) === 0) {
           this.isOver = true
           this.giftvote = null
         }
@@ -348,7 +348,7 @@ export default {
       // let newShareUrl = 'http://zsapp.vtfour.wlnikiz.cn/vote/?v=300&u=1&s=2'
       // let pram = { url: newShareUrl, sysid: this.params.sid }
       // 测试end
-      let pram = { url: window.location.href.split('#')[0], sysid: this.params.sid }
+      let pram = { url: location.href.split('#')[0], sysid: this.params.sid }
       this.$api.getConfig(pram).then(res => {
         // if (!res) return
         // console.log('getConfig', res.data)
@@ -371,16 +371,16 @@ export default {
         ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
       })
 
-      let initShareUrl = window.location.href.split('#')[0]
+      let initShareUrl = location.href.split('#')[0]
       console.log('initShareUrl: ', initShareUrl)
       let key = initShareUrl.split('?')[1]
-      key = window.btoa(key)// 编码
+      // key = window.btoa(key)// 编码
       key = encodeURIComponent(key) // url编码
       console.log(key)
       // 测试start
       // let newShareUrl = 'http://test.active.iactive.top/vote/?v=300&u=1&s=2'
       // 测试end
-      let protocol = window.location.protocol
+      let protocol = location.protocol
       let shareHost
       let hosts = data.host
       if (hosts && hosts.length > 0) {
@@ -390,11 +390,11 @@ export default {
         console.log('index: ', index)
         shareHost = hosts[index].host
       } else {
-        shareHost = window.location.host
+        shareHost = location.host
       }
-      let pathname = window.location.pathname
+      let pathname = location.pathname
       pathname = pathname.replace('main', 'index')
-      let newShareUrl = protocol + '//' + shareHost + pathname + '?key=' + key
+      let newShareUrl = protocol + '//' + shareHost + pathname + '?sharekey=' + key
       console.log('newShareUrl: ', newShareUrl)
       let { giftvote, itemData } = this
       let shareObj
@@ -525,6 +525,16 @@ export default {
           break
         default:
           break
+      }
+    },
+    parToSignup () {
+      // this.$refs.footerDom.isToSignup()
+      let openid = this.meData && this.meData.openid
+      let meOpenid = Cookies.get('openid')
+      if (meOpenid.includes(openid)) {
+        this.$refs.footerDom.clickNav('VDetails')
+      } else {
+        this.$refs.footerDom.clickNav('Vsignup')
       }
     }
   },

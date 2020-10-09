@@ -60,7 +60,8 @@ export default {
       let mySwiper = new Swiper('.swiper-container', {
         autoplay: 2000, // 可选选项，自动滑动
         speed: 500,
-        pagination: '.swiper-pagination'
+        pagination: '.swiper-pagination',
+        autoHeight: true
       })
       console.log(mySwiper)
     }

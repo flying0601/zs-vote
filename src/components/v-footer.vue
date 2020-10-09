@@ -58,7 +58,7 @@ import Cookies from 'js-cookie'
 import Toast from 'vant/lib/toast'
 import 'vant/lib/toast/style'
 import dataFormat from '@/assets/js/format-time.js'
-import Bus from '@/utils/Bus.js'
+// import Bus from '@/utils/Bus.js'
 Vue.use(Toast)
 export default {
   components: {},
@@ -79,17 +79,17 @@ export default {
     }
   },
   created () {
-    let _this = this
-    Bus.$on('toSignup', (data) => {
-      // 一些操作，message就是从top组件传过来的值
-      // console.log('toSignup', data)
-      let openid = _this.meData && _this.meData.openid
-      if (_this.meOpenid.includes(openid)) {
-        _this.clickNav('VDetails')
-      } else {
-        _this.clickNav('Vsignup')
-      }
-    })
+    // let _this = this
+    // Bus.$on('toSignup', (data) => {
+    //   // 一些操作，message就是从top组件传过来的值
+    //   // console.log('toSignup', data)
+    //   let openid = _this.meData && _this.meData.openid
+    //   if (_this.meOpenid.includes(openid)) {
+    //     _this.clickNav('VDetails')
+    //   } else {
+    //     _this.clickNav('Vsignup')
+    //   }
+    // })
   },
   mounted () {
   },
@@ -122,6 +122,15 @@ export default {
         }
       }
       this.$parent.handleSchedule(name)
+    },
+    // 弃用
+    isToSignup () {
+      let openid = this.meData && this.meData.openid
+      if (this.meOpenid.includes(openid)) {
+        this.clickNav('VDetails')
+      } else {
+        this.clickNav('Vsignup')
+      }
     }
 
   },

@@ -25,14 +25,23 @@ export default {
     let sysid // 系统id
     let urlParam // 请求参数
     // 分享链接特殊处理
+    // 加密参数
     let shareKey = Util.GetQueryString('key')
-    if (shareKey) {
-      // var encodeData = window.btoa('name=xiaoming&age=10')// 编码
-      // encodeData = encodeURIComponent(encodeData)
-      // console.log('encodeData: ', encodeData)
+    // 不加密参数
+    let shareKeys = Util.GetQueryString('sharekey')
+    if (shareKeys) {
+      let linkKey = decodeURIComponent(shareKeys)
+      // linkKey = atob(linkKey)
+      let initShareUrl = location.href.split('#')[0]
+      let baseUrl = initShareUrl.split('?')[0]
+      console.log('decodeData: ', baseUrl + '?' + linkKey)
+      let initUrl = baseUrl + '?' + linkKey
+      sysid = Util.GetQueryString('s', initUrl)
+      urlParam = '?' + linkKey
+    } else if (shareKey) {
       let linkKey = decodeURIComponent(shareKey)
-      linkKey = window.atob(linkKey)
-      let initShareUrl = window.location.href.split('#')[0]
+      linkKey = atob(linkKey)
+      let initShareUrl = location.href.split('#')[0]
       let baseUrl = initShareUrl.split('?')[0]
       console.log('decodeData: ', baseUrl + '?' + linkKey)
       let initUrl = baseUrl + '?' + linkKey
@@ -40,7 +49,7 @@ export default {
       urlParam = '?' + linkKey
     } else {
       sysid = Util.GetQueryString('s')
-      urlParam = window.location.search
+      urlParam = location.search
       console.log('urlParam: ', urlParam)
       urlParam = urlParam.split('#')[0]
     }
@@ -53,13 +62,13 @@ export default {
         index = Math.round(index)
         console.log('index: ', index)
         let sysHost = data[index].host
-        let protocol = window.location.protocol
-        let pathname = window.location.pathname
+        let protocol = location.protocol
+        let pathname = location.pathname
         // console.log(pathname)
         pathname = pathname.includes('index.html') ? pathname.replace('index.html', '') : pathname
         let newUrl = protocol + '//' + sysHost + pathname + 'main.html' + urlParam
         console.log('newUrl: ', newUrl)
-        window.location.href = newUrl
+        location.href = newUrl
       } else {
         alert('active host is null')
       }

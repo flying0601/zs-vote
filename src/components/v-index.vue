@@ -105,7 +105,7 @@
 * @date 2020/07/05 00:06:32
 */
 // import $ from 'jquery'
-import Bus from '@/utils/Bus.js'
+// import Bus from '@/utils/Bus.js'
 export default {
   components: { },
   props: ['giftvote', 'player', 'curPlayer', 'params', 'meBtn'],
@@ -237,7 +237,8 @@ export default {
       })
     },
     toSignup () {
-      Bus.$emit('toSignup', 'toSignup')
+      // Bus.$emit('toSignup', 'toSignup')
+      this.$parent.parToSignup()
     }
 
   },

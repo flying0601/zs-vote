@@ -166,7 +166,7 @@ import Overlay from 'vant/lib/overlay'
 import 'vant/lib/overlay/style'
 import VHb from '@/components/v-hb.vue'
 import dataFormat from '@/assets/js/format-time.js'
-import Bus from '@/utils/Bus.js'
+// import Bus from '@/utils/Bus.js'
 Vue.use(Toast)
 Vue.use(Overlay)
 export default {
@@ -320,7 +320,8 @@ export default {
       })
     },
     toSignup () {
-      Bus.$emit('toSignup', 'toSignup')
+      // Bus.$emit('toSignup', 'toSignup')
+      this.$parent.parToSignup()
     }
   },
   destroyed () { }

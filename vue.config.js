@@ -21,10 +21,10 @@ const CompressionWebpackPlugin = require('compression-webpack-plugin')
 const gzipSourceList = ['css', 'js']
 const Timestamp = new Date().getTime()
 module.exports = {
-  publicPath: '/vt/',
-  outputDir: './dist/vt/', // build path
-  // publicPath: '/vote/',
-  // outputDir: './dist/vote/', // build path
+  // publicPath: '/vt/',
+  // outputDir: './dist/vt/', // build path
+  publicPath: '/vote/',
+  outputDir: './dist/vote/', // build path
   pages: pages, // more pages config
   productionSourceMap: false, // don·t use map
   devServer: {

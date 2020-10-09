@@ -17,10 +17,9 @@
       <div style="font-size:18px;font-weight:600;margin-top:10px">亲, 再送我个钻石呗!</div>
 
     </div>
-    <div style="background-color: #ffa603; border: solid 1px #000;"
+    <div @click="clickGive(voteuser)" style="background-color: #ffa603; border: solid 1px #000;"
          id="zbtn">
-      <a @click="clickGive(voteuser)"
-         style="font-size: 18px;color:#000">助力</a>
+      <a style="font-size: 18px;color:#000">助力</a>
     </div>
     <div style="background-color: #fff; border: solid 1px #000;"
          id="zbtn">
