@@ -1,0 +1,443 @@
+
+
+  .tit {
+    color: #2b425b;
+    text-align: center;
+    width: 100%;
+
+    margin: 10px auto;
+    font-size: 15px;
+    background-image: url("../img/titbg.png");
+    background-size: 100% 100%;
+  }
+
+  .tit .content {
+    width: 65%;
+    padding: 40px 0 70px;
+    margin: 0 auto;
+    color: #dec084;
+  }
+
+  .info-area {
+    color: #f4dc9c;
+    display: flex;
+    flex-wrap: nowrap;
+
+    width: 94%;
+    margin: 10px auto 0;
+  }
+
+  .info-area .item {
+    text-align: center;
+    font-size: 15px;
+    padding: 10px 0;
+    width: 33.3%;
+  }
+
+  .info-area .item_count {
+    font-weight: bold;
+    font-size: 17px;
+  }
+
+  .time {
+    background: #ebd292;
+    color: #202221;
+    text-align: center;
+
+    font-weight: bold;
+    font-size: 0.9rem;
+  }
+
+  .red {
+    color: #ebd292;
+    background: #1b1b1b;
+    border: 4px;
+    padding: 0 3px;
+  }
+
+  .item-content {
+    width: 94%;
+    margin: 20px auto;
+
+  }
+
+  .item-content h4 {
+    line-height: 32px;
+    color: #feeabf;
+
+  }
+
+  .item-area {
+    padding: 12px 24px;
+    color: #758697;
+
+  }
+
+  .button-group {
+    width: 94%;
+    margin: 10px auto;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: nowrap;
+  }
+
+  .button-group .button-item {
+    background: #42a5f5;
+    color: #ffffff;
+    margin: 0 5px;
+    border-radius: 10px;
+    line-height: 38px;
+    font-size: 16px;
+    width: 100%;
+    text-align: center;
+    display: block;
+  }
+
+  .search-area {
+    width: 94%;
+    margin: 10px auto;
+    display: flex;
+    line-height: 40px;
+  }
+
+  .search-area input {
+    width: 345px;
+    height: 38px;
+    background-color: #ffffff;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border: solid 1px #feeac0;
+  }
+
+  .search-area .button-search {
+    width: 94px;
+    height: 43px;
+    background-image: linear-gradient(90deg,
+        #d9b787 0%,
+        #e7b77a 0%,
+        #f4b66d 0%,
+        #f9d197 45%,
+        #feebc1 100%),
+      linear-gradient(#ffffff,
+        #ffffff);
+    background-blend-mode: normal,
+      normal;
+    border-radius: 0px 20px 20px 0px;
+    outline: none;
+    border: none;
+    font-family: PingFang-SC-Bold;
+    font-size: 15px;
+    font-weight: normal;
+    font-stretch: normal;
+    letter-spacing: 0px;
+    color: #000000;
+  }
+
+  .user-list {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .user-list .user-item {
+    width: 48%;
+    margin: 5px 1%;
+    background-color: #151515;
+    box-shadow: inset 0px 0px 12px 0px rgba(254, 233, 191, 0.08);
+    border-radius: 3px;
+    position: relative;
+  }
+
+  .vote-button {
+    width: 100%;
+    height: 49px;
+    background-color: #fbd69f;
+    border-radius: 0px 0px 3px 3px;
+    position: absolute;
+    bottom: 0;
+  }
+
+  .vote-button .vote {
+    width: 101px;
+    height: 23px;
+    background-color: #2b2623;
+    border-radius: 17px;
+    font-family: PingFang-SC-Medium;
+    font-size: 15px;
+    font-weight: normal;
+    font-stretch: normal;
+    letter-spacing: 0px;
+    color: #fde3b4;
+    margin: 0 auto;
+    text-align: center;
+    line-height: 23px;
+  }
+
+  .vote-button .apply_number {
+    font-weight: normal;
+    font-stretch: normal;
+    color: #000000;
+    margin: 0 auto;
+    text-align: center;
+    font-size: 17px;
+    letter-spacing: 0px;
+    color: #000000;
+  }
+
+  .noneimg {
+    font-size: 1.1rem;
+    flex-direction: column-reverse;
+    align-items: center;
+    color: #e7ca8e;
+    font-weight: bold;
+    text-align: center;
+    justify-content: space-around;
+    position: relative;
+    height: 150px;
+    background-color: #151515;
+    box-shadow: inset 0px 0px 12px 0px rgba(254, 233, 191, 0.08);
+    border-radius: 3px;
+    position: relative;
+  }
+
+  .user-list .user-item .rankimg {
+    position: absolute;
+    background-image: url("../img/cup.png");
+    background-size: 32px 29px;
+    width: 32px;
+    height: 29px;
+    font-size: 8px;
+    font-weight: bold;
+    font-stretch: normal;
+    letter-spacing: 0px;
+    color: #151515;
+    line-height: 29px;
+    text-align: center;
+  }
+
+  .four {
+    position: absolute;
+    top: 4px;
+    left: 6px;
+    background-image: url("../img/cup1.png");
+    background-size: 23px 23px;
+    width: 23px;
+    height: 23px;
+    font-size: 8px;
+    font-weight: bold;
+    font-stretch: normal;
+    letter-spacing: 0px;
+    color: #151515;
+    line-height: 21px;
+    text-align: center;
+  }
+
+  .user-list .user-item .rankimg img {
+    width: 50px;
+    height: 50px;
+    display: block;
+    margin: 0 auto;
+  }
+
+  .shopname {
+    width: 98%;
+    position: absolute;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 999;
+    padding-left: 2%;
+    color: #ffffff;
+    line-height: 32px;
+  }
+
+  .banner {
+    position: relative;
+  }
+
+  .baoming-btn {
+    color: #222222;
+    font-size: 0.95rem;
+    text-align: center;
+    line-height: 36px;
+    width: 94%;
+    margin: 10px auto 5px;
+    display: flex;
+    background-size: 100% 100%;
+    font-weight: bold;
+    background-image: url("../img/baoming3.png");
+    justify-content: center;
+    align-items: center;
+  }
+
+  .datanone {
+    text-align: center;
+    font-size: 0.85rem;
+    color: #f5dc9a;
+    margin: 10px 0;
+    width: 100%;
+  }
+
+  [v-cloak] {
+    display: none;
+  }
+
+  .active-info {
+    border: 4px solid #cba962;
+    width: 94%;
+    border-radius: 8px;
+    background: #212121;
+    margin: 10px auto;
+  }
+
+  .daojishi {
+    background: #ebd292;
+    width: 100%;
+    color: #242223;
+
+  }
+
+  .text-area1 {
+    text-align: center;
+    width: 78%;
+    margin: 0 auto;
+  }
+
+  .weizhi {
+    width: 16px;
+    height: auto;
+    margin-right: 5px;
+  }
+
+  .user-list .user-item .text .name {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    font-size: 0.8rem;
+  }
+
+  .jiazai {
+    width: 60px;
+  }
+
+  .todaystart {
+    width: 94%;
+    margin: 10px auto;
+    background-image: url(../img/renqizhixing.png);
+    background-size: 100% 100%;
+    color: #ffe094;
+    font-size: 0.95rem;
+    text-align: center;
+    height: 167px;
+  }
+
+  .start-tit {
+    line-height: 37px;
+  }
+
+  .start-name {
+    display: flex;
+    padding: 18px 16px;
+    justify-content: center;
+  }
+
+  .start-name img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 4px solid #fadc92;
+
+  }
+
+  .start-name .start-name-text {
+    width: 200px;
+    text-align: left;
+    text-overflow: -o-ellipsis-lastline;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    margin-left: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .zhuanfa {
+    bottom: 55px;
+    right: 0px;
+    position: fixed;
+    display: block;
+    z-index: 800;
+  }
+
+  .zhuanfa img {
+    width: 45px;
+    height: 45px;
+  }
+
+  .poster {
+    display: none;
+    position: fixed;
+    left: 0%;
+    width: 100%;
+    height: 100%;
+    top: 0%;
+    z-index: 5000;
+
+  }
+
+  .poster img {
+    width: 75%;
+    display: block;
+    margin: 0px auto;
+    margin-top: 15%;
+    border-radius: 10px;
+  }
+
+  .close img {
+    display: block;
+    width: 40px;
+    height: 40px;
+    margin: 10px auto 0;
+  }
+
+  .zhezhao {
+    position: fixed;
+    left: 0%;
+    width: 100%;
+    height: 100%;
+    top: 0%;
+    z-index: 998;
+    display: none;
+    background: rgba(0, 0, 0, 0.6);
+  }
+
+  .logoimg {
+    display: inline-block;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+
+  .logoimg img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 2px solid #fadc92;
+  }
+
+  #service {
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 50%;
+    color: #ffffff;
+    position: fixed;
+    top: 20%;
+    right: 1rem;
+    width: 3rem;
+    height: 3rem;
+    z-index: 1000;
+    text-align: center;
+    line-height: 3rem;
+  }

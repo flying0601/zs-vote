@@ -36,8 +36,8 @@
         </div>
 
         <div class="threebutton">
-          <a @click="toModule('Vrank')"><span>规则/奖品</span></a>
-          <a @click="toModule('VAward')"><span>比赛排名</span></a>
+          <a @click="toModule('VAward')"><span>规则/奖品</span></a>
+          <a @click="toModule('Vrank')"><span>比赛排名</span></a>
 
           <a @click="toSignup()"> <span>{{meBtn}}</span></a>
 
@@ -66,7 +66,7 @@
               :style="item['effect']" @click="clickItem(item)">
             <div><i class="number">{{item['noid']}}号</i>
               <a :href="item['url']"
-                 class="img"><img :src="item['img1']"></a>
+                 class="img"><img v-lazy="item['img1']"></a>
               <div class="clearfix">
                 <p style="overflow: hidden;text-overflow: ellipsis; white-space: nowrap;">{{item['name']}}</p>
                 <p style="text-align:left;margin-top:10px"><a :href="item['url']"
@@ -89,7 +89,7 @@
         <div class="bg-purple5 bg-blue5 cl-yellow"
              style="width:40%; border-radius:20px; height:36px; line-height:36px;margin:0 auto; text-align:center;">活动规则</div>
       </div>
-      <div class="divcon" v-html="html">
+      <div class="divcon" v-html="html" v-lazy-container="{ selector: 'img' ,error: 'resource/common/nodata.png', loading: 'resource/common/loading.gif' }">
 
       </div>
 
@@ -106,6 +106,7 @@
 */
 // import $ from 'jquery'
 // import Bus from '@/utils/Bus.js'
+import replaceAllImg from '@/utils/replaceAllImg.js'
 export default {
   components: { },
   props: ['giftvote', 'player', 'curPlayer', 'params', 'meBtn'],
@@ -185,7 +186,7 @@ export default {
     },
     escape2Html (str) {
       const arrEntities = { 'lt': '<', 'gt': '>', 'nbsp': ' ', 'amp': '&', 'quot': '"' }
-      return str.replace(/&(lt|gt|nbsp|amp|quot);/ig, function (all, t) { return arrEntities[t] })
+      return replaceAllImg(str.replace(/&(lt|gt|nbsp|amp|quot);/ig, function (all, t) { return arrEntities[t] }))
     },
     clickItem (item) {
       this.$parent.goDetails(item)
@@ -248,4 +249,7 @@ export default {
 
 <style lang='scss' scoped>
 @import "@/mixins/_utils.scss";
+.divcon{
+  overflow: hidden;
+}
 </style>

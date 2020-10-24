@@ -11,9 +11,9 @@
           <li v-for="(item,i) in rankList"
               :key="i"
               :style="`background-image:url('app/WeChat/GiftVote/img/hg${i<3?1:2}.gif');`">
-            <a @click="clickItem(item)"><img :src="item['img1']"></a>
-            <p>{{item['name']}}</p>
-            <p>{{item['votenum']}}</p>
+            <a @click="clickItem(item)"><img v-lazy="item['img1']"></a>
+            <p>{{item && item['name']}}</p>
+            <p>{{item && item['votenum']}}</p>
           </li>
         </ul>
       </div>
@@ -71,27 +71,27 @@
             </div>
           </div>
           <div class="img">
-            <img :src="voteuser['img1']"
+            <img v-lazy="voteuser['img1']"
                  v-if="voteuser['img1']">
-            <img :src="voteuser['img2']"
+            <img v-lazy="voteuser['img2']"
                  v-if="voteuser['img2']">
-            <img :src="voteuser['img3']"
+            <img v-lazy="voteuser['img3']"
                  v-if="voteuser['img3']">
-            <img :src="voteuser['img4']"
+            <img v-lazy="voteuser['img4']"
                  v-if="voteuser['img4']">
-            <img :src="voteuser['img5']"
+            <img v-lazy="voteuser['img5']"
                  v-if="voteuser['img5']">
-            <img :src="voteuser['img6']"
+            <img v-lazy="voteuser['img6']"
                  v-if="voteuser['img6']">
-            <img :src="voteuser['img7']"
+            <img v-lazy="voteuser['img7']"
                  v-if="voteuser['img7']">
-            <img :src="voteuser['img8']"
+            <img v-lazy="voteuser['img8']"
                  v-if="voteuser['img8']">
-            <img :src="voteuser['img9']"
+            <img v-lazy="voteuser['img9']"
                  v-if="voteuser['img9']">
-            <img :src="voteuser['img10']"
+            <img v-lazy="voteuser['img10']"
                  v-if="voteuser['img10']">
-            <img :src="voteuser['img11']"
+            <img v-lazy="voteuser['img11']"
                  v-if="voteuser['img11']">
             <video v-if="voteuser['img12']"
                    id="pic_s_img_12"

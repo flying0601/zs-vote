@@ -73,3 +73,6 @@ export default {
 <style lang='scss' scoped>
 @import "@/mixins/_utils.scss";
 </style>
+<style >
+
+</style>

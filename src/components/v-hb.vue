@@ -9,7 +9,7 @@
           @load="loaded"
         >
         <div class="author-img-box" id="imgBox" ref="imgBox" :style="`height:${width}px`">
-           <img class="author-img" :src="voteuser.avatar+'?'+new Date().getTime()" crossOrigin="anonymous">
+           <img @load="loaded" class="author-img" :src="voteuser.avatar+'?'+new Date().getTime()" crossOrigin="anonymous">
         </div>
         <div class="author-text">{{voteuser.noid}}号 {{voteuser.name}}</div>
         <!-- <div class="author-tip">请大家支持我!</div> -->
@@ -50,7 +50,7 @@ export default {
   watch: {
     voteuser: {
       handler (newName, oldName) {
-        console.log(newName)
+        console.log({ newName })
         this.loaded()
       },
       immediate: true
@@ -87,7 +87,7 @@ export default {
       // 生成海报
       const vm = this
       const domObj = document.getElementById('posterHtml')
-      html2canvas(domObj, {
+      domObj && html2canvas(domObj, {
         useCORS: true,
         allowTaint: false,
         logging: true,
@@ -104,7 +104,9 @@ export default {
       })
     },
     loaded () {
-      this.createPoster()
+      setTimeout(() => {
+        this.createPoster()
+      }, 600)
     }
 
   },

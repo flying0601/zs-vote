@@ -6,11 +6,13 @@
          class="rotate"></div>
     <audio preload="auto"
            id="media"
+           :autoplay="true"
            :src="`${configData.mp3}`"
            loop></audio>
     <audio v-if="configData.voiceplay && configData.voiceplay_url"
            preload="auto"
            id="media2"
+           :autoplay="true"
            :src="`${configData.voiceplay_url}?${time}`"
            loop></audio>
   </div>
@@ -94,6 +96,42 @@ export default {
       setInterval(function () {
         Cookies.set('now_time', audio.currentTime)
       }, 5000)
+      this.autoPlayMusic()
+    },
+    musicPlay () {
+      console.log(' [0].paused: ', $('#media')[0].paused)
+      if ($('#media')[0].paused) {
+        $(this).addClass('play_yinfu').removeClass('off')
+        $('#yinfu').addClass('rotate')
+        $('#media')[0].play()
+        if ($('#media2').length > 0) {
+          $('#media2')[0].play()
+        }
+      }
+    },
+    // 解决所有浏览器音乐自动播放的问题
+    autoPlayMusic () {
+      let _this = this
+      console.log('_this: ', _this)
+      /* 自动播放音乐效果，解决浏览器或者APP自动播放问题 */
+      function musicInBrowserHandler () {
+        _this.musicPlay(true)
+        document.body.removeEventListener('touchstart', musicInBrowserHandler)
+      }
+      document.body.addEventListener('touchstart', musicInBrowserHandler)
+      /* 自动播放音乐效果，解决微信自动播放问题 */
+      function musicInWeixinHandler () {
+        _this.musicPlay(true)
+        document.addEventListener(
+          'WeixinJSBridgeReady',
+          function () {
+            _this.musicPlay(true)
+          },
+          false
+        )
+        document.removeEventListener('DOMContentLoaded', musicInWeixinHandler)
+      }
+      document.addEventListener('DOMContentLoaded', musicInWeixinHandler)
     }
   },
   destroyed () { }

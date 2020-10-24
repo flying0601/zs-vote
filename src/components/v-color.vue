@@ -33,17 +33,19 @@ export default {
   methods: {
     setColor (config) {
       // console.log('config: ', config.main_color)
-      let common = `<link rel="stylesheet" href="app/WeChat/GiftVote/css/donate.css?33">` + `<link rel="stylesheet" href="app/WeChat/GiftVote/css/success.css">`
+      let common = `<link rel="stylesheet" href="app/WeChat/GiftVote/css/donate.css?33">` +
+        `<link rel="stylesheet" href="app/WeChat/GiftVote/css/success.css">`
       let link = {}; let style = {}
-      link['1'] = `<link href="/Public/app/WeChat/GiftVote/css/purple.css?2" rel="stylesheet">`
+      link['1'] = `<link href="app/WeChat/GiftVote/css/purple.css?2" rel="stylesheet">`
       style['1'] = `<style> .vsavz{margin-bottom:0px} .zuanlist ul{color:white} .divmain10 .divcon{margin-top:0px;padding-top:20px;color:#FFF;} .weui-panel__bd{margin-bottom:-10px} .num_box{background-color:#4b00a7} </style>`
       link['2'] = `<link href="app/WeChat/GiftVote/css/yellow.css?23" rel="stylesheet">`
       style['2'] = `<style> .vsavz{margin-bottom:0px} .zuanlist ul{color:white} .divmain10 .divcon{margin-top:0px;padding-top:20px;color:#FFF;} .weui-panel__bd{margin-bottom:-10px} .num_box{background-color:#fd9f00} .cl-yellow{color:white !important;} .zuanlist ul li span{color:#fff} </style>`
-      link['4'] = `<link href="/Public/app/WeChat/GiftVote/css/blue.css" rel="stylesheet"> `
+      link['4'] = `<link href="app/WeChat/GiftVote/css/blue.css" rel="stylesheet"> `
       style['4'] = `<style> .vsavz{margin-bottom:0px} .zuanlist ul{color:white} .divmain10 .divcon{margin-top:0px;padding-top:20px;color:#FFF;} .weui-panel__bd{margin-bottom:-10px} .num_box,.user_info{background-color:#0955ff} .cl-yellow{color:white !important;} .zuanlist ul li span{color:#fff} .num_box .num_box_ul,.divbotuser h2{background-color:#0955ff} .add .i{color:white;background:#28b6f6;border:4px solid #0955ff} .zuanlist{margin-bottom:-40px } @-webkit-keyframes heartbborder{ 0% {border:4px solid #0955ff;} 20% {border:3px solid #0955ff;} 40% {border:2px solid #0955ff;} 60% {border:3px solid #0955ff;} 80% {border:4px solid #0955ff;} 100% {border:3px solid #0955ff;} } </style>`
       link['5'] = `<link href="app/WeChat/GiftVote/css/index2.css" rel="stylesheet">`
       style['5'] = `
       <style>
+      .swiper-container .swiper-pagination-bullet-active{ background-color:#${config.main_color}; }
       .threebutton a{background-color:#${config.main_color};}
       .divmain11 .divsub{background:#${config.main_color};}
       .content .list_box li a.vote{background:#${config.main_color};}
@@ -74,7 +76,7 @@ export default {
         #pcount{background:#${config.back_color}} `
       // console.log(' link, style: ', link, style)
       this.styleColor = common + link[config.zdy_color] + style[config.zdy_color]
-      console.log(this.styleColor, config.zdy_color)
+      // console.log(this.styleColor, config.zdy_color)
     }
   },
   destroyed () {}

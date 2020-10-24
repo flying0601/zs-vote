@@ -3,7 +3,7 @@
 
     <div class="rankp">活动奖品</div>
     <div class="divmain10 bg-purple4 bg-blue4 cl-white pd-b-15">
-      <div class="divcon" v-html="giftvote && giftvote.prizemsg && html">
+      <div class="divcon" v-html="giftvote && giftvote.prizemsg && html" v-lazy-container="{ selector: 'img' ,error: 'resource/common/nodata.png', loading: 'resource/common/loading.gif' }">
       </div>
     </div>
   </div>
@@ -16,6 +16,7 @@
 * @description
 * @date 2020/07/08 01:05:42
 */
+import replaceAllImg from '@/utils/replaceAllImg.js'
 export default {
   components: { },
   props: ['giftvote'],
@@ -35,7 +36,8 @@ export default {
   methods: {
     escape2Html (str) {
       const arrEntities = { 'lt': '<', 'gt': '>', 'nbsp': ' ', 'amp': '&', 'quot': '"' }
-      return str.replace(/&(lt|gt|nbsp|amp|quot);/ig, function (all, t) { return arrEntities[t] })
+      // console.log(replaceAllImg(str.replace(/&(lt|gt|nbsp|amp|quot);/ig, function (all, t) { return arrEntities[t] })))
+      return replaceAllImg(str.replace(/&(lt|gt|nbsp|amp|quot);/ig, function (all, t) { return arrEntities[t] }))
     }
   },
   destroyed () { }

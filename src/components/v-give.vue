@@ -11,7 +11,7 @@
            class="weui-media-box weui-media-box_appmsg weui-cell_access">
           <div class="weui-media-box__hd">
             <img class="weui-media-box__thumb"
-                 :src="voteuser.headimgurl || voteuser.img1"
+                 v-lazy="voteuser.headimgurl || voteuser.img1"
                  :alt="`${voteuser['noid']}`"
                  style="border-radius: 50%;height: 100%; border: 1px solid #ffffff;">
           </div>
@@ -72,7 +72,7 @@
                  :key="i"
                  @click="selGive(ktem,i)"
                  :title="`支付${ktem['giftprice']}元，赞助 ${voteuser['name']} ${voteuser['gifttitle']}，抵${ktem['giftvote']}票！`">
-              <p class="donate_money_icon"><img :src="ktem.gifticon ||''"
+              <p class="donate_money_icon"><img v-lazy="ktem.gifticon ||''"
                      width="50%" /></p>
               <span class="donate_money_title">{{ktem.gifttitle || "钻石"}}</span>
               <span class="donate_money_num">{{ktem.giftprice}}点</span>
@@ -208,7 +208,7 @@ export default {
         gificon: this.subGive.gifticon,
         fee: this.subGive.giftprice,
         giftvote: this.subGive.giftvote,
-        body: `为${this.voteuser.name}送礼物`
+        body: `为${this.voteuser.name ? this.voteuser.name.replace(/\s*/g, '') : this.voteuser.name}送礼物`
       }
       this.$api.postGive(prams).then(result => {
       // if (!res) return

@@ -1,124 +1,59 @@
 
 <template>
-  <div class="container container-fill">
-    <v-color v-if="giftvote && !isOver && giftvote.config"
-             :setting="giftvote.config"></v-color>
-    <component  v-if="giftvote && !isOver && giftvote.config && giftvote.gonggao" :config="giftvote.config" :gonggao="giftvote.gonggao" :is="'Vadvert'" ></component>
-    <v-sider v-if="giftvote && !isOver && giftvote.topimg && isSider"
-             :siderData="giftvote.topimg"
-             :topimgUrl="giftvote.config && giftvote.config.topimgUrl"
-             :curComp="currentComponent"></v-sider>
-    <!-- <v-index v-if="giftvote && giftvote.eventrule && false"
-             :giftvote="giftvote"></v-index>
-    <v-award v-if="giftvote && giftvote.prizemsg"
-             :giftvote="giftvote"></v-award> -->
-    <component  v-if="giftvote && !isOver && currentComponent" :is="currentComponent" :giftvote="giftvote" :player="votePlayer" :curPlayer="curPlayer" :params="params" :voteuser="itemData" :playerCensus="playerCensus" :meBtn="meBtn">
-</component>
-    <v-footer ref="footerDom" v-if="giftvote && !isOver && isFooter" :curComp="currentComponent" :giftvote="giftvote" :meData="meData" :voteuser="itemData"></v-footer>
-     <component  v-if="giftvote && !isOver && giftvote.config && giftvote.config.mp3" :config="giftvote.config" :is="'Vmap3'" ></component>
-     <component  v-if="giftvote && !isOver && giftvote.config && giftvote.config.pftx" :config="giftvote.config" :is="'Vpftx'" ></component>
-  <component  v-if="isOver" :player="votePlayer" :params="params" :is="'VOver'" ></component>
-  <v-init v-if="!giftvote && !isOver"></v-init>
-  </div>
-
+<div class="app-body">
+  <remote-css v-for="(item,i) in csslinks" :key="i" :cdn="item"></remote-css>
+   <component  :is="'VInit'" v-if="isInit"></component>
+   <component  :is="curModules" :giftvote="giftvote"></component>
+</div>
 </template>
 
 <script>
-import VInit from '@/components/v-init.vue'
-import VFooter from '@/components/v-footer.vue'
-import VColor from '@/components/v-color.vue'
-import VSider from '@/components/v-sider.vue'
-import wx from 'weixin-js-sdk'
-import Cookies from 'js-cookie'
 import Util from '@/utils/util.js'
-import Vue from 'vue'
-import Dialog from 'vant/lib/dialog'
-import 'vant/lib/dialog/style'
-Vue.use(Dialog)
+import Cookies from 'js-cookie'
 export default {
   components: {
-    VInit,
-    VFooter,
-    VColor,
-    VSider,
-    VAward (resolve) {
-      // let date = new Date()
-      // console.log(date.valueOf())
-      require(['@/components/v-award.vue'], resolve)
-      // let dates = new Date()
-      // console.log(dates.valueOf())
+    'remote-css': {
+      render (h) {
+        return (<link rel='stylesheet' type='text/css' href={this.cdn} />)
+      },
+      props: {
+        cdn: {
+          type: String,
+          required: true
+        }
+      }
     },
-    VIndex (resolve) {
-      require(['@/components/v-index.vue'], resolve)
+    modulesOne (resolve) {
+      require(['./modules/moduleOne.vue'], resolve)
     },
-    Vrank (resolve) {
-      require(['@/components/v-rank.vue'], resolve)
+    modulesTwo (resolve) {
+      require(['./modules/moduleTwo.vue'], resolve)
     },
-    VDetails (resolve) {
-      require(['@/components/v-details.vue'], resolve)
-    },
-    VGive (resolve) {
-      require(['@/components/v-give.vue'], resolve)
-    },
-    VSuccess (resolve) {
-      require(['@/components/v-success.vue'], resolve)
-    },
-    Vsignup (resolve) {
-      require(['@/components/v-signup.vue'], resolve)
-    },
-    Vmap3 (resolve) {
-      require(['@/components/v-mp3.vue'], resolve)
-    },
-    Vpftx (resolve) {
-      require(['@/components/v-pftx.vue'], resolve)
-    },
-    Vadvert (resolve) {
-      require(['@/components/v-advert.vue'], resolve)
-    },
-    VOver (resolve) {
-      require(['@/components/v-over.vue'], resolve)
+    VInit (resolve) {
+      require(['@/components/v-init.vue'], resolve)
     }
   },
 
   data () {
     return {
-      isOver: false, // 活动是否结束
+      csslinks: [
+        'app/WeChat/GiftVote/css/swiper-3.3.1.min.css',
+        'app/WeChat/GiftVote/css/weui1.0.1.min.css',
+        'app/WeChat/GiftVote/css/bootstrap.min.css',
+        'app/WeChat/GiftVote/css/index.css?34',
+        'app/WeChat/GiftVote/css/main.css?34'
+      ],
       giftvote: null,
-      votePlayer: [],
-      currentComponent: 'VIndex',
-      isSider: true,
-      isFooter: true,
-      itemData: null, // 选手详情
-      playerCensus: null, // 选手详情统计
-      giveData: null,
-      curPlayer: null,
+      isInit: true,
+      curModules: null,
+      config: null,
       params: {
-        mname: null,
         vid: null,
-        sid: null,
-        uid: null,
-        did: null
-      },
-      sdkConfig: null,
-      shareContent: null,
-      meBtn: '我的报名',
-      meData: null
+        sid: null
+      }
     }
   },
   beforeCreate () {
-    // 分享链接特殊处理
-    let shareKey = Util.GetQueryString('key')
-    if (shareKey) {
-      // var encodeData = window.btoa('name=xiaoming&age=10')// 编码
-      // encodeData = encodeURIComponent(encodeData)
-      // console.log('encodeData: ', encodeData)
-      let linkKey = decodeURIComponent(shareKey)
-      // linkKey = window.atob(linkKey)
-      let initShareUrl = location.href.split('#')[0]
-      let baseUrl = initShareUrl.split('?')[0]
-      console.log('decodeData: ', baseUrl + '?' + linkKey)
-      location.href = baseUrl + '?' + linkKey
-    }
     // 测试环境用的
     let host = location.host
     console.log({ host })
@@ -176,11 +111,8 @@ export default {
         history.pushState({ page: 'initUrl' }, '', initUrl)
         Cookies.remove('initUrl')
         this.params = {
-          mname: Util.GetQueryString('m', initUrl),
           vid: Util.GetQueryString('v', initUrl),
-          sid: Util.GetQueryString('s', initUrl),
-          uid: Util.GetQueryString('u', initUrl),
-          did: Util.GetQueryString('d', initUrl)
+          sid: Util.GetQueryString('s', initUrl)
         }
         Cookies.set('sysid', this.params.sid)
         console.log('Cookies', Cookies.get('openid'))
@@ -189,75 +121,24 @@ export default {
   },
   watch: {},
   created () {
-    console.log('Cookies', Cookies.get('openid'))
-    // console.log('created', location.href)
     let initUrl = Cookies.get('initUrl')
     if (!initUrl) {
       this.params = {
-        mname: Util.GetQueryString('m'),
         vid: Util.GetQueryString('v'),
-        sid: Util.GetQueryString('s'),
-        uid: Util.GetQueryString('u'),
-        did: Util.GetQueryString('d')
+        sid: Util.GetQueryString('s')
       }
       Cookies.set('sysid', this.params.sid)
     }
     console.log('params', this.params)
     this.params && this.params.sid && this.voteInfo()
-
-    !this.itemData && this.params.did && (this.params.mname === 'VDetails' || this.params.mname === 'VGive' || this.params.mname === 'VSuccess') && this.playerInfo('init')
-    this.params && this.params.mname && this.handleSchedule(this.params.mname)
+    console.log('this.params: ', this.params)
   },
   mounted () {
-    if (window.history && window.history.pushState) {
-      history.pushState(null, null, document.URL)
-      window.addEventListener('popstate', this.backChange, false) // false阻止默认事件
-    }
 
     // this.getShareCensus()
   },
   methods: {
-    handleSchedule (name) {
-      this.currentComponent = name
-      switch (name) {
-        case 'VGive':
-          this.isSider = false
-          this.isFooter = false
-          break
-        case 'VSuccess':
-          this.isSider = false
-          break
-        case 'Vsignup':
-          this.isSider = false
-          break
-        case 'VDetails':
-          this.isSider = false
-          this.isFooter = true
-          break
-        default:
-          this.isSider = true
-          this.isFooter = true
-          break
-      }
-      Util.updUrl('m', name)
-      // 加载分享内容
-      this.sdkConfig && this.getConfig(this.sdkConfig)
-    },
-    goDetails (item) {
-      this.preComponet = this.currentComponent // 记录上一个模块
-      this.itemData = item
-      this.handleSchedule('VDetails')
-      this.params.did = item.id
-      this.playerInfo()
-      Util.updUrl('d', item.id)
-      this.sdkConfig && this.getConfig(this.sdkConfig)
-    },
-    goGive (item) {
-      this.handleSchedule('VGive')
-    },
-    goSuccess (item) {
-      this.handleSchedule('VSuccess')
-    },
+
     voteInfo () {
       let pram = {
         id: this.params.vid
@@ -265,277 +146,35 @@ export default {
       this.$api.getVoteInfo(pram).then(res => {
       // if (!res) return
         this.giftvote = res.data
+        let { config } = this.giftvote
         document.title = this.giftvote && this.giftvote.title
+        let key = config && config.zdy_color
+        console.log('key: ', key)
+        switch (key) {
+          case 0:
+            this.curModules = 'modulesTwo'
+            break
+          case 1:
+            this.curModules = 'modulesOne'
+            break
+          case 2:
+            this.curModules = 'modulesOne'
+            break
+          case 3:
+            this.curModules = 'modulesOne'
+            break
+          case 4:
+            this.curModules = 'modulesOne'
+            break
+          case 5:
+            this.curModules = 'modulesOne'
+            break
+          default:
+            this.curModules = 'VInit'
+            break
+        }
         // console.log('data', pram.id, res.data)
-        this.getConfigData()
-        // 活动是否结束
-        let { voteendtime } = this.giftvote
-        let curTime = Math.round(new Date() / 1000)
-        let timeSapn = voteendtime - curTime
-        console.log('timeSapn: ', timeSapn)
-        if (timeSapn < 0) {
-          this.isOver = true
-          this.giftvote = null
-        }
-        let{ giftvote } = this
-        // console.log('object', parseInt(giftvote.status) === 0)
-        if (giftvote && parseInt(giftvote.status) === 0) {
-          this.isOver = true
-          this.giftvote = null
-        }
-        if (!this.meData || (this.meData && !this.meData.id)) {
-          this.getMeInfo()
-        }
       })
-    },
-    playerInfo (data) {
-      this.type = data
-      let pram = {
-        id: this.params.did
-      }
-      this.$api.getVotePlayerInfo(pram).then(res => {
-      // if (!res) return
-        this.itemData = res.data
-        this.type && this.handleSchedule('VDetails')
-        this.postPlayerCensus()
-        // console.log('itemData', pram.id, res.data)
-      })
-    },
-    postPlayerCensus () {
-      let pram = {
-        noid: this.itemData.noid,
-        sysid: this.params.sid,
-        pid: this.params.vid
-      }
-      this.$api.getPlayerCensus(pram).then(res => {
-        this.playerCensus = res && res.data && res.data[0]
-        // console.log(this.playerCensus)
-      })
-    },
-    getData (pid = 300, order = 'vote', page = 1, searchKey, size = 10) {
-      let pram = {
-        pid: pid,
-        page: page,
-        size: size,
-        order: order
-      }
-      console.log('searchKey')
-      if (searchKey) {
-        if (this.isNaN(searchKey)) {
-          pram.noid = searchKey
-        } else {
-          pram.name = searchKey
-        }
-      }
-      this.$api.getVotePlayer(pram).then(res => {
-        this.curPlayer = res.data
-        // if (!res) return
-        if (page === 1) {
-          this.votePlayer = res.data.data
-        } else {
-          this.votePlayer.push(...res.data.data)
-        }
-
-        // console.log('votePlayer', res.data)
-      })
-    },
-    isNaN (value) {
-      let reg = /\d/
-      return reg.test(value)
-    },
-    getConfigData () {
-      // 测试start
-      // let newShareUrl = 'http://zsapp.vtfour.wlnikiz.cn/vote/?v=300&u=1&s=2'
-      // let pram = { url: newShareUrl, sysid: this.params.sid }
-      // 测试end
-      let pram = { url: location.href.split('#')[0], sysid: this.params.sid }
-      this.$api.getConfig(pram).then(res => {
-        // if (!res) return
-        // console.log('getConfig', res.data)
-        res && res.data && (this.sdkConfig = res.data) && this.getConfig(res.data)
-      })
-    },
-    // 微信分享
-    getConfig (data) {
-      let _this = this
-      wx.config({
-        debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-        appId: data.appId, // ', // 必填，公众号的唯一标识
-        timestamp: data.timestamp, // 必填，生成签名的时间戳
-        nonceStr: data.nonceStr, // 必填，生成签名的随机串
-        signature: data.signature, // 必填，签名，见附录1
-        jsApiList: [
-          'onMenuShareTimeline', // 旧分享到朋友圈
-          'onMenuShareAppMessage', // 旧分享给朋友
-          'chooseWXPay'// 微信支付
-        ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-      })
-
-      let initShareUrl = location.href.split('#')[0]
-      console.log('initShareUrl: ', initShareUrl)
-      let key = initShareUrl.split('?')[1]
-      // key = window.btoa(key)// 编码
-      key = encodeURIComponent(key) // url编码
-      console.log(key)
-      // 测试start
-      // let newShareUrl = 'http://test.active.iactive.top/vote/?v=300&u=1&s=2'
-      // 测试end
-      let protocol = location.protocol
-      let shareHost
-      let hosts = data.host
-      if (hosts && hosts.length > 0) {
-        let min = 0; let max = hosts.length - 1
-        let index = Math.round((Math.random() * (max - min) + min) * 10) / 10
-        index = Math.round(index)
-        console.log('index: ', index)
-        shareHost = hosts[index].host
-      } else {
-        shareHost = location.host
-      }
-      let pathname = location.pathname
-      pathname = pathname.replace('main', 'index')
-      let newShareUrl = protocol + '//' + shareHost + pathname + '?sharekey=' + key
-      console.log('newShareUrl: ', newShareUrl)
-      let { giftvote, itemData } = this
-      let shareObj
-      if (this.currentComponent === 'VDetails' && giftvote) {
-        itemData.ID = itemData.noid
-        let content = giftvote['item_sharedesc']
-        let regex = /([^\\{\]]+)(?=\}})/g
-        let params = content.match(regex)
-        for (let i in params) {
-          let value = itemData[params[i]]
-          content = content.replace(`{{${params[i]}}}`, value)
-        }
-        shareObj = {
-          imgUrl: itemData['img1'],
-          Link: newShareUrl,
-          title: giftvote['item_sharetitle'],
-          content: content
-        }
-      } else {
-        shareObj = {
-          imgUrl: giftvote && giftvote['shareimg'],
-          Link: newShareUrl,
-          title: giftvote && giftvote['sharetitle'],
-          content: giftvote && giftvote['sharedesc']
-        }
-      }
-      console.log('ddd', shareObj)
-      this.shareContent = shareObj
-      let { shareContent } = this
-      // console.log('分享方式:', _this.shareType)
-      // 分享给朋友
-      // wx.updateAppMessageShareData(this.winxin())
-      wx.ready(() => {
-        wx.onMenuShareAppMessage({
-          title: shareContent.title,
-          desc: shareContent.content,
-          link: shareContent.Link,
-          imgUrl: shareContent.imgUrl,
-          success: function () {
-            // 设置成功
-            console.log('old朋友设置成功', shareContent)
-            _this.getShareCensus()
-          }
-        })
-        // 分享到朋友圈
-        // wx.updateTimelineShareData(this.winxin())
-        wx.onMenuShareTimeline({
-          title: shareContent.title,
-          desc: shareContent.content,
-          link: shareContent.Link,
-          imgUrl: shareContent.imgUrl,
-          success: function () {
-            // 设置成功
-            console.log('old朋友圈设置成功', shareContent)
-            _this.getShareCensus()
-          }
-        })
-      })
-
-      wx.error(function (result) {
-        // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
-        console.log(result + '测试报错，上线后就可以修复')
-      })
-    },
-    getShareCensus () {
-      let pram = {
-        id: this.params.vid
-      }
-      if (this.currentComponent === 'VDetails') {
-        pram.did = this.params.did
-      }
-      this.$api.getShare(pram).then(res => {
-        console.log('分享统计:', res.data)
-      })
-    },
-    getMeInfo () {
-      let pram = {
-        pid: this.params.vid,
-        openid: Cookies.get('openid'),
-        v: Date.parse(new Date())
-      }
-      this.$api.getVotePlayerInfo(pram).then(res => {
-      // if (!res) return
-        if (res && res.data && res.data.id) {
-          this.meData = res.data
-          this.meBtn = '我的'
-        }
-        // console.log('this.meData: ', this.meData)
-        // console.log('itemData', pram.id, res.data)
-      })
-    },
-    backChange () {
-      // const that = this
-      console.log('监听到了')
-      let { currentComponent, preComponet } = this
-      switch (currentComponent) {
-        case 'VIndex':
-          Dialog.confirm({
-            // title: '标题',
-            message: '是否确定退出?'
-          })
-            .then(() => {
-              // on confirm
-              wx.closeWindow()
-            })
-            .catch(() => {
-              // on cancel
-            })
-          break
-        case 'VAward':
-          this.handleSchedule('VIndex')
-          break
-        case 'Vsignup':
-          this.handleSchedule('VIndex')
-          break
-        case 'Vrank':
-          this.handleSchedule('VIndex')
-          break
-        case 'VDetails':
-          preComponet = preComponet || 'VIndex'
-          this.handleSchedule(preComponet)
-          break
-        case 'VSuccess':
-          this.goDetails(this.itemData)
-          break
-        case 'VGive':
-          this.goDetails(this.itemData)
-          break
-        default:
-          break
-      }
-    },
-    parToSignup () {
-      // this.$refs.footerDom.isToSignup()
-      let openid = this.meData && this.meData.openid
-      let meOpenid = Cookies.get('openid')
-      if (meOpenid.includes(openid)) {
-        this.$refs.footerDom.clickNav('VDetails')
-      } else {
-        this.$refs.footerDom.clickNav('Vsignup')
-      }
     }
   },
   destroyed () {
@@ -545,8 +184,9 @@ export default {
 </script>
 <style lang="scss">
 html,
-body,
-.container  {
+body ,
+.app-body{
+  width: 100%;
   height: 100%;
 }
 </style>

@@ -13,7 +13,7 @@
            v-for="(item,i) in rankList"
            :key="i">
           <li><span v-text="i < 2 ? ''  : i+1"></span>
-            <span><img :src="item['img1']"><i>{{item['name']}}</i></span>
+            <span><img v-lazy="item['img1']"><i>{{item['name']}}</i></span>
             <span>{{item['votenum']}}</span></li>
         </a>
       </ul>

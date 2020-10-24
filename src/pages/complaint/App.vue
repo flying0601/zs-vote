@@ -7,13 +7,12 @@
 
 <script>
 import wx from 'weixin-js-sdk'
+import Util from '@/utils/util.js'
+import Cookies from 'js-cookie'
 export default {
   components: {
     VComplaint (resolve) {
       require(['@/components/v-complaint.vue'], resolve)
-    },
-    VOver (resolve) {
-      require(['@/components/v-over.vue'], resolve)
     }
   },
   data () {
@@ -24,7 +23,14 @@ export default {
   },
 
   beforeCreate () {
-
+    let sysid = Util.GetQueryString('s') || Cookies.get('sysid')
+    sysid && this.$api.getTesting({ sysid: sysid }).then(res => {
+      // if (!res) return
+      // console.log(res)
+      if (res && res.data && res.data.testId) {
+        location.href = 'http://h5.actfou.com/110.html'
+      }
+    })
   },
   created () {
   },

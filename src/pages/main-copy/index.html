@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+  <meta content="telephone=no" name="format-detection" />
+  <meta content="email=no" name="format-detection" />
+  <meta name="keywords" content="" />
+  <meta name="description" content="" />
+  <!-- <link rel="stylesheet" type="text/css" href="../../assets//reset.css"> -->
+  <link rel="stylesheet" type="text/css" href="app/WeChat/GiftVote/css/swiper-3.3.1.min.css">
+  <link href="app/WeChat/GiftVote/css/weui1.0.1.min.css" rel="stylesheet">
+	<link href="app/WeChat/GiftVote/css/bootstrap.min.css" rel="stylesheet">
+	<link href="app/WeChat/GiftVote/css/index.css?34" rel="stylesheet"> 
+  <link href="app/WeChat/GiftVote/css/main.css?2" rel="stylesheet"> 
+  <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+  <title>加载中...</title>
+</head>
+<style>
+   #Loading {
+    top:50%;
+    left:50%;
+    position: absolute;
+    -webkit-transform: translateY(-50%) translateX(-50%);
+    transform: translateY(-50%) translateX(-50%);
+    z-index:100;
+   }
+   @-webkit-keyframes ball-beat {
+    50% {
+     opacity: 0.2;
+     -webkit-transform: scale(0.75);
+     transform: scale(0.75); }
+
+    100% {
+     opacity: 1;
+     -webkit-transform: scale(1);
+     transform: scale(1); } }
+
+   @keyframes ball-beat {
+    50% {
+     opacity: 0.2;
+     -webkit-transform: scale(0.75);
+     transform: scale(0.75); }
+
+    100% {
+     opacity: 1;
+     -webkit-transform: scale(1);
+     transform: scale(1); } }
+
+   .ball-beat > div {
+    background-color: #279fcf;
+    width: 15px;
+    height: 15px;
+    border-radius: 100% !important;
+    margin: 2px;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+    display: inline-block;
+    -webkit-animation: ball-beat 0.7s 0s infinite linear;
+    animation: ball-beat 0.7s 0s infinite linear; }
+   .ball-beat > div:nth-child(2n-1) {
+    -webkit-animation-delay: 0.35s !important;
+    animation-delay: 0.35s !important;
+    }
+</style>
+<body>
+  <div id="app">
+    <div id="Loading">
+      <div class="loader-inner ball-beat">
+       <div></div>
+       <div></div>
+       <div></div>
+      </div>
+     </div>
+  </div>
+</body>
+<!-- <script>
+  var _hmt = _hmt || [];
+  (function () {
+    // 这里使用的是 eruda， vconsole也不错，根据个人习惯（两种都是拦截了请求资源，所以遇到一些奇葩的请求问题，不妨注释一下）
+    const domains = [] // 正式服域名配置
+    const hostname = window.location.hostname
+    if (domains.indexOf(hostname) === -1) {
+      var src = '//cdn.bootcss.com/eruda/1.2.4/eruda.min.js';
+      document.write('<scr' + 'ipt src="' + src + '"></scr' + 'ipt>');
+      document.write('<scr' + 'ipt>eruda.init();</scr' + 'ipt>');
+    }
+  })();
+</script> -->
+
+</html>

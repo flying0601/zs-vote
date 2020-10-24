@@ -1,0 +1,157 @@
+.foot {
+    display: flex;
+    flex-wrap: nowrap;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    background: #64b4c4;
+    width: 100%;
+    background-size: 100%;
+    z-index: 999;
+    background-image: url("../img/dibu.png");
+}
+
+
+.foot .item {
+    padding: 8px 0;
+    width: 33.3%;
+    color: #22211f;
+    display: block;
+}
+
+
+.foot .item img {
+    display: block;
+    width: 20px;
+    height: 20px;
+    margin: 0 auto;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+    color: #666666;
+    font-family: '微软雅黑', "Helvetica Neue", Helvetica, Arial, sans-serif;
+    background-image: url("../img/qiantaibg.png");
+    background-size: 100%;
+}
+
+
+a {
+    text-decoration: none;
+}
+
+.scroll {
+    background: rgba(0, 0, 0, 0.6);
+    color: #ffffff;
+    line-height: 35px;
+    font-size: 16px;
+    flex: 1;
+}
+
+.notice {
+    position: fixed;
+    top: 0;
+    height: 35px;
+    left: 0;
+    z-index: 999;
+    display: flex;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.notice img {
+    width: 23px;
+    height: 23px;
+    margin: 6px auto;
+    display: block;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+    padding: 0;
+}
+
+.video_show {
+    width: 35px;
+    height: 35px;
+    position: fixed;
+    top: 40px;
+    right: 10px;
+    border: 1.3px solid #f5dc9a;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 9999;
+
+
+}
+
+.xuanzhuan {
+    -webkit-transition-property: -webkit-transform;
+
+    -webkit-transition-duration: 1s;
+
+    -moz-transition-property: -moz-transform;
+
+    -moz-transition-duration: 1s;
+
+    -webkit-animation: rotate 3s linear infinite;
+
+    -moz-animation: rotate 3s linear infinite;
+
+    -o-animation: rotate 3s linear infinite;
+
+    animation: rotate 3s linear infinite;
+}
+
+.video_show img {
+    display: block;
+    width: 25px;
+    height: 25px;
+    margin: 5px;
+}
+
+@-webkit-keyframes rotate {
+    from {
+        -webkit-transform: rotate(0deg)
+    }
+
+    to {
+        -webkit-transform: rotate(360deg)
+    }
+
+}
+
+@-moz-keyframes rotate {
+    from {
+        -moz-transform: rotate(0deg)
+    }
+
+    to {
+        -moz-transform: rotate(359deg)
+    }
+
+}
+
+@-o-keyframes rotate {
+    from {
+        -o-transform: rotate(0deg)
+    }
+
+    to {
+        -o-transform: rotate(359deg)
+    }
+
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg)
+    }
+
+    to {
+        transform: rotate(359deg)
+    }
+
+}

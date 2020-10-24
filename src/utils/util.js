@@ -1,7 +1,9 @@
+/* eslint-disable */
 /** 工具类
  * @author ylf
  * @param date 2018.01.04
  */
+
 var Util = {
   /**
    * @msg:获取参数
@@ -100,6 +102,18 @@ var Util = {
       ('0' + r.toString(16)).slice(-2) +
       ('0' + g.toString(16)).slice(-2) +
       ('0' + b.toString(16)).slice(-2)
+  },
+  replaceAllImg (html) {
+    var newContent = html.replace(/<img[^>]*>/gi, function (str, capture) {
+      // console.log('==', str);
+      var srcReg = /src=[\'\"]?([^\'\"]*)[\'\"]?/i
+      var url = str.match(srcReg)
+      console.log(url[1])
+      var mat = str.replace(/src=\"(.*)\"/gi, 'data-src=' + url[1])
+      return mat
+    })
+
+    return newContent
   }
 
 }
