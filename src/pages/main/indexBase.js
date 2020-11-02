@@ -1,9 +1,9 @@
 import Vue from 'vue'
 
-import VInit from '@/components/v-init.vue'
-import VFooter from '@/components/v-footer.vue'
-import VColor from '@/components/v-color.vue'
-import VSider from '@/components/v-sider.vue'
+import VInit from '@/components/v1/v-init.vue'
+import VFooter from '@/components/v1/v-footer.vue'
+import VColor from '@/components/v1/v-color.vue'
+import VSider from '@/components/v1/v-sider.vue'
 import wx from 'weixin-js-sdk'
 import Cookies from 'js-cookie'
 import Util from '@/utils/util.js'
@@ -20,39 +20,39 @@ export default {
     VAward (resolve) {
       // let date = new Date()
       // console.log(date.valueOf())
-      require(['@/components/v-award.vue'], resolve)
+      require(['@/components/v1/v-award.vue'], resolve)
       // let dates = new Date()
       // console.log(dates.valueOf())
     },
     VIndex (resolve) {
-      require(['@/components/v-index.vue'], resolve)
+      require(['@/components/v1/v-index.vue'], resolve)
     },
     Vrank (resolve) {
-      require(['@/components/v-rank.vue'], resolve)
+      require(['@/components/v1/v-rank.vue'], resolve)
     },
     VDetails (resolve) {
-      require(['@/components/v-details.vue'], resolve)
+      require(['@/components/v1/v-details.vue'], resolve)
     },
     VGive (resolve) {
-      require(['@/components/v-give.vue'], resolve)
+      require(['@/components/v1/v-give.vue'], resolve)
     },
     VSuccess (resolve) {
-      require(['@/components/v-success.vue'], resolve)
+      require(['@/components/v1/v-success.vue'], resolve)
     },
-    Vsignup (resolve) {
-      require(['@/components/v-signup.vue'], resolve)
+    VSignup (resolve) {
+      require(['@/components/v1/v-signup.vue'], resolve)
     },
-    Vmap3 (resolve) {
-      require(['@/components/v-mp3.vue'], resolve)
+    VMap3 (resolve) {
+      require(['@/components/v1/v-mp3.vue'], resolve)
     },
-    Vpftx (resolve) {
-      require(['@/components/v-pftx.vue'], resolve)
+    VPftx (resolve) {
+      require(['@/components/v1/v-pftx.vue'], resolve)
     },
-    Vadvert (resolve) {
-      require(['@/components/v-advert.vue'], resolve)
+    VAdvert (resolve) {
+      require(['@/components/v1/v-advert.vue'], resolve)
     },
     VOver (resolve) {
-      require(['@/components/v-over.vue'], resolve)
+      require(['@/components/v1/v-over.vue'], resolve)
     }
   },
 
@@ -203,7 +203,7 @@ export default {
         case 'VSuccess':
           this.isSider = false
           break
-        case 'Vsignup':
+        case 'VSignup':
           this.isSider = false
           break
         case 'VDetails':
@@ -483,7 +483,7 @@ export default {
         case 'VAward':
           this.handleSchedule('VIndex')
           break
-        case 'Vsignup':
+        case 'VSignup':
           this.handleSchedule('VIndex')
           break
         case 'Vrank':
@@ -510,7 +510,7 @@ export default {
       if (meOpenid.includes(openid)) {
         this.$refs.footerDom.clickNav('VDetails')
       } else {
-        this.$refs.footerDom.clickNav('Vsignup')
+        this.$refs.footerDom.clickNav('VSignup')
       }
     }
   },

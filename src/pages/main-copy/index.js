@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 import api from '../../fetch/api'
-import dataFormat from '@/assets/js/format-time.js'
+import dataFormat from '@/utils/format-time.js'
 // import '../../config/rem'
 Vue.prototype.$api = api
 // console.log(api)

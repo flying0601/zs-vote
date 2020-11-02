@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 import api from '../../fetch/api'
-import dataFormat from '@/assets/js/format-time.js'
+import dataFormat from '@/utils/format-time.js'
 import VueLazyload from 'vue-lazyload'
 Vue.use(VueLazyload, {
   preLoad: 1.3, // 预加载高度比例

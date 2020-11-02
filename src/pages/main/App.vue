@@ -2,7 +2,7 @@
 <template>
 <div class="app-body">
   <remote-css v-for="(item,i) in csslinks" :key="i" :cdn="item"></remote-css>
-   <component  :is="'VInit'" v-if="isInit"></component>
+   <v-init v-if="isInit"></v-init>
    <component  :is="curModules" :giftvote="giftvote"></component>
 </div>
 </template>
@@ -10,6 +10,7 @@
 <script>
 import Util from '@/utils/util.js'
 import Cookies from 'js-cookie'
+import VInit from '@/components/v1/v-init.vue'
 export default {
   components: {
     'remote-css': {
@@ -23,26 +24,18 @@ export default {
         }
       }
     },
+    VInit,
     modulesOne (resolve) {
       require(['./modules/moduleOne.vue'], resolve)
     },
     modulesTwo (resolve) {
       require(['./modules/moduleTwo.vue'], resolve)
-    },
-    VInit (resolve) {
-      require(['@/components/v-init.vue'], resolve)
     }
   },
 
   data () {
     return {
-      csslinks: [
-        'app/WeChat/GiftVote/css/swiper-3.3.1.min.css',
-        'app/WeChat/GiftVote/css/weui1.0.1.min.css',
-        'app/WeChat/GiftVote/css/bootstrap.min.css',
-        'app/WeChat/GiftVote/css/index.css?34',
-        'app/WeChat/GiftVote/css/main.css?34'
-      ],
+      csslinks: [],
       giftvote: null,
       isInit: true,
       curModules: null,
@@ -153,20 +146,62 @@ export default {
         switch (key) {
           case 0:
             this.curModules = 'modulesTwo'
+            this.csslinks = [
+              'app/WeChat/GiftVote/css/swiper-3.3.1.min.css',
+              'static/css/font-awesome-4.7.0/css/font-awesome.min.css',
+              'static/js/layer/theme/default/layer.css?v=3.1.1',
+              'static/css/mobile.css',
+              'static/css/index.css'
+            ]
             break
           case 1:
+            this.csslinks = [
+              'app/WeChat/GiftVote/css/swiper-3.3.1.min.css',
+              'app/WeChat/GiftVote/css/weui1.0.1.min.css',
+              'app/WeChat/GiftVote/css/bootstrap.min.css',
+              'app/WeChat/GiftVote/css/index.css?34',
+              'app/WeChat/GiftVote/css/main.css?34'
+            ]
             this.curModules = 'modulesOne'
             break
           case 2:
+            this.csslinks = [
+              'app/WeChat/GiftVote/css/swiper-3.3.1.min.css',
+              'app/WeChat/GiftVote/css/weui1.0.1.min.css',
+              'app/WeChat/GiftVote/css/bootstrap.min.css',
+              'app/WeChat/GiftVote/css/index.css?34',
+              'app/WeChat/GiftVote/css/main.css?34'
+            ]
             this.curModules = 'modulesOne'
             break
           case 3:
+            this.csslinks = [
+              'app/WeChat/GiftVote/css/swiper-3.3.1.min.css',
+              'app/WeChat/GiftVote/css/weui1.0.1.min.css',
+              'app/WeChat/GiftVote/css/bootstrap.min.css',
+              'app/WeChat/GiftVote/css/index.css?34',
+              'app/WeChat/GiftVote/css/main.css?34'
+            ]
             this.curModules = 'modulesOne'
             break
           case 4:
+            this.csslinks = [
+              'app/WeChat/GiftVote/css/swiper-3.3.1.min.css',
+              'app/WeChat/GiftVote/css/weui1.0.1.min.css',
+              'app/WeChat/GiftVote/css/bootstrap.min.css',
+              'app/WeChat/GiftVote/css/index.css?34',
+              'app/WeChat/GiftVote/css/main.css?34'
+            ]
             this.curModules = 'modulesOne'
             break
           case 5:
+            this.csslinks = [
+              'app/WeChat/GiftVote/css/swiper-3.3.1.min.css',
+              'app/WeChat/GiftVote/css/weui1.0.1.min.css',
+              'app/WeChat/GiftVote/css/bootstrap.min.css',
+              'app/WeChat/GiftVote/css/index.css?34',
+              'app/WeChat/GiftVote/css/main.css?34'
+            ]
             this.curModules = 'modulesOne'
             break
           default:
@@ -188,5 +223,12 @@ body ,
 .app-body{
   width: 100%;
   height: 100%;
+}
+// loading大小
+img[lazy="loading"] {
+  width: 22px !important;
+  height: auto !important;
+  margin: 0 auto;
+  display: block;
 }
 </style>

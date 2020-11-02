@@ -12,7 +12,7 @@ import Cookies from 'js-cookie'
 export default {
   components: {
     VComplaint (resolve) {
-      require(['@/components/v-complaint.vue'], resolve)
+      require(['@/components/v1/v-complaint.vue'], resolve)
     }
   },
   data () {

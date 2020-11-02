@@ -1,5 +1,4 @@
 
-
   .tit {
     color: #2b425b;
     text-align: center;
@@ -22,7 +21,6 @@
     color: #f4dc9c;
     display: flex;
     flex-wrap: nowrap;
-
     width: 94%;
     margin: 10px auto 0;
   }
@@ -38,41 +36,46 @@
     font-weight: bold;
     font-size: 17px;
   }
-
-  .time {
+  .count-down {
+    width: 94%;
+    height: 38px;
+    background-image: linear-gradient(90deg,
+        #d9b787 0%,
+        #e7b77a 0%,
+        #f4b66d 0%,
+        #f9d197 45%,
+        #feebc1 100%),
+      linear-gradient(#ffffff,
+        #ffffff);
+    background-blend-mode: normal,
+      normal;
+    border-radius: 14px;
+    line-height: 38px;
+    margin: 10px auto;
     background: #ebd292;
     color: #202221;
     text-align: center;
-
     font-weight: bold;
     font-size: 0.9rem;
   }
 
-  .red {
+
+  .count-down-num {
     color: #ebd292;
     background: #1b1b1b;
     border: 4px;
     padding: 0 3px;
   }
-
-  .item-content {
+  .activity-time {
     width: 94%;
     margin: 20px auto;
-
   }
 
-  .item-content h4 {
+  .activity-time-content h4 {
     line-height: 32px;
     color: #feeabf;
-
+    text-align: center;
   }
-
-  .item-area {
-    padding: 12px 24px;
-    color: #758697;
-
-  }
-
   .button-group {
     width: 94%;
     margin: 10px auto;
