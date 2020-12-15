@@ -1,27 +1,50 @@
 
 <template>
-<div class="module-one">
-  <div class="container container-fill">
-    <v-color v-if="giftvote && !isOver && giftvote.config"
-             :setting="giftvote.config"></v-color>
-    <component  v-if="giftvote && !isOver && giftvote.config && giftvote.gonggao" :config="giftvote.config" :gonggao="giftvote.gonggao" :is="'VAdvert'" ></component>
-    <v-sider v-if="giftvote && !isOver && giftvote.topimg && isSider"
-             :siderData="giftvote.topimg"
-             :topimgUrl="giftvote.config && giftvote.config.topimgUrl"
-             :curComp="currentComponent"></v-sider>
-    <!-- <v-index v-if="giftvote && giftvote.eventrule && false"
+  <div class="module-one">
+    <div class="container container-fill">
+      <v-color v-if="giftvote && !isOver && giftvote.config"
+               :setting="giftvote.config"></v-color>
+      <component v-if="giftvote && !isOver && giftvote.config && giftvote.gonggao"
+                 :config="giftvote.config"
+                 :gonggao="giftvote.gonggao"
+                 :is="'VAdvert'"></component>
+      <v-sider v-if="giftvote && !isOver && giftvote.topimg && isSider"
+               :siderData="giftvote.topimg"
+               :topimgUrl="giftvote.config && giftvote.config.topimgUrl"
+               :curComp="currentComponent"></v-sider>
+      <!-- <v-index v-if="giftvote && giftvote.eventrule && false"
              :giftvote="giftvote"></v-index>
     <v-award v-if="giftvote && giftvote.prizemsg"
              :giftvote="giftvote"></v-award> -->
-    <component  v-if="giftvote && !isOver && currentComponent" :is="currentComponent" :giftvote="giftvote" :player="votePlayer" :curPlayer="curPlayer" :params="params" :voteuser="itemData" :playerCensus="playerCensus" :meBtn="meBtn">
-</component>
-    <v-footer ref="footerDom" v-if="giftvote && !isOver && isFooter" :curComp="currentComponent" :giftvote="giftvote" :meData="meData" :voteuser="itemData"></v-footer>
-     <component  v-if="giftvote && !isOver && giftvote.config && giftvote.config.mp3" :config="giftvote.config" :is="'VMap3'" ></component>
-     <component  v-if="giftvote && !isOver && giftvote.config && giftvote.config.pftx" :config="giftvote.config" :is="'VPftx'" ></component>
-  <component  v-if="isOver" :player="votePlayer" :params="params" :is="'VOver'" ></component>
-  <!-- <v-init v-if="!giftvote && !isOver"></v-init> -->
+      <component v-if="giftvote && !isOver && currentComponent"
+                 :is="currentComponent"
+                 :giftvote="giftvote"
+                 :player="votePlayer"
+                 :curPlayer="curPlayer"
+                 :params="params"
+                 :voteuser="itemData"
+                 :playerCensus="playerCensus"
+                 :meBtn="meBtn">
+      </component>
+      <v-footer ref="footerDom"
+                v-if="giftvote && !isOver && isFooter"
+                :curComp="currentComponent"
+                :giftvote="giftvote"
+                :meData="meData"
+                :voteuser="itemData"></v-footer>
+      <component v-if="giftvote && !isOver && giftvote.config && giftvote.config.mp3"
+                 :config="giftvote.config"
+                 :is="'VMap3'"></component>
+      <component v-if="giftvote && !isOver && giftvote.config && giftvote.config.pftx"
+                 :config="giftvote.config"
+                 :is="'VPftx'"></component>
+      <component v-if="isOver"
+                 :player="votePlayer"
+                 :params="params"
+                 :is="'VOver'"></component>
+      <!-- <v-init v-if="!giftvote && !isOver"></v-init> -->
+    </div>
   </div>
-</div>
 </template>
 
 <script>
@@ -209,7 +232,7 @@ export default {
         this.isOver = true
         this.giftvote = null
       }
-      let{ giftvote } = this
+      let { giftvote } = this
       // console.log('object', parseInt(giftvote.status) === 0)
       if (giftvote && parseInt(giftvote.status) === 0) {
         this.isOver = true
@@ -227,7 +250,7 @@ export default {
         id: this.params.did
       }
       this.$api.getVotePlayerInfo(pram).then(res => {
-      // if (!res) return
+        // if (!res) return
         this.itemData = res.data
         this.type && this.handleSchedule('VDetails')
         this.postPlayerCensus()
@@ -252,7 +275,7 @@ export default {
         size: size,
         order: order
       }
-      console.log('searchKey')
+      console.log('searchKey', searchKey)
       if (searchKey) {
         if (this.isNaN(searchKey)) {
           pram.noid = searchKey
@@ -411,7 +434,7 @@ export default {
         v: Date.parse(new Date())
       }
       this.$api.getVotePlayerInfo(pram).then(res => {
-      // if (!res) return
+        // if (!res) return
         if (res && res.data && res.data.id) {
           this.meData = res.data
           this.meBtn = '我的'
@@ -440,25 +463,25 @@ export default {
               // on cancel
             })
           break
-          /*  case 'VAward':
-          this.handleSchedule('VIndex')
-          break
-        case 'VSignup':
-          this.handleSchedule('VIndex')
-          break
-        case 'Vrank':
-          this.handleSchedule('VIndex')
-          break
-        case 'VDetails':
-          preComponet = preComponet || 'VIndex'
-          this.handleSchedule(preComponet)
-          break
-        case 'VSuccess':
-          this.goDetails(this.itemData)
-          break
-        case 'VGive':
-          this.goDetails(this.itemData)
-          break */
+        /*  case 'VAward':
+        this.handleSchedule('VIndex')
+        break
+      case 'VSignup':
+        this.handleSchedule('VIndex')
+        break
+      case 'Vrank':
+        this.handleSchedule('VIndex')
+        break
+      case 'VDetails':
+        preComponet = preComponet || 'VIndex'
+        this.handleSchedule(preComponet)
+        break
+      case 'VSuccess':
+        this.goDetails(this.itemData)
+        break
+      case 'VGive':
+        this.goDetails(this.itemData)
+        break */
         default:
           if (preComponet && preComponet.length > 0) {
             let preName = this.preComponet.pop()
@@ -495,9 +518,7 @@ export default {
 // @import "@/assets/css/_weui1.0.1.min.css";
 html,
 body,
-.module-one
-.container  {
+.module-one .container {
   height: 100%;
 }
-
 </style>

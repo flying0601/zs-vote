@@ -1,10 +1,13 @@
 
 <template>
-<div class="app-body">
-  <remote-css v-for="(item,i) in csslinks" :key="i" :cdn="item"></remote-css>
-   <v-init v-if="isInit"></v-init>
-   <component  :is="curModules" :giftvote="giftvote"></component>
-</div>
+  <div class="app-body">
+    <remote-css v-for="(item,i) in csslinks"
+                :key="i"
+                :cdn="item"></remote-css>
+    <v-init v-if="isInit"></v-init>
+    <component :is="curModules"
+               :giftvote="giftvote"></component>
+  </div>
 </template>
 
 <script>
@@ -56,7 +59,7 @@ export default {
       let sysid = Util.GetQueryString('s') || Cookies.get('sysid')
       // 检测ip是否举报
       sysid && this.$api.getTesting({ sysid: sysid }).then(res => {
-      // if (!res) return
+        // if (!res) return
         console.log(res)
         // 检测公众是否一致
         let appid = res && res.data && res.data.appid
@@ -68,7 +71,7 @@ export default {
           location.reload()
         }
         if (res && res.data && res.data.testId) {
-          location.href = 'http://h5.actfou.com/110.html'
+          location.href = 'http://h5.iactive.top/110.html'
         }
       })
     }
@@ -137,14 +140,14 @@ export default {
         id: this.params.vid
       }
       this.$api.getVoteInfo(pram).then(res => {
-      // if (!res) return
+        // if (!res) return
         this.giftvote = res.data
         let { config } = this.giftvote
         document.title = this.giftvote && this.giftvote.title
         let key = config && config.zdy_color
         console.log('key: ', key)
         switch (key) {
-          case 0:
+          case 6:
             this.curModules = 'modulesTwo'
             this.csslinks = [
               'app/WeChat/GiftVote/css/swiper-3.3.1.min.css',
@@ -219,8 +222,8 @@ export default {
 </script>
 <style lang="scss">
 html,
-body ,
-.app-body{
+body,
+.app-body {
   width: 100%;
   height: 100%;
 }

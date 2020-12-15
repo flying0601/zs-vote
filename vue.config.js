@@ -37,8 +37,8 @@ module.exports = {
     proxy: {
       '/api': {
         // 测试环境
-        // target: 'http://zsapi.i-active.cn',
-        target: 'http://batezsapi.i-active.cn',
+        target: 'http://zsapi.i-active.cn',
+        // target: 'http://batezsapi.i-active.cn',
         // target: 'http://127.0.0.1:8390',
         changeOrigin: true // 是否跨域
       }
@@ -59,7 +59,8 @@ module.exports = {
             deleteOriginalAssets: false // 是否删除原始资源
           })
         ],
-        output: { // 输出重构  打包编译后的 文件名称  【模块名称.版本号.时间戳】
+        output: {
+          // 输出重构  打包编译后的 文件名称  【模块名称.版本号.时间戳】
           filename: `js/[name].${Timestamp}.js`,
           chunkFilename: `js/[name].${Timestamp}.js`
         },
@@ -69,7 +70,8 @@ module.exports = {
       }
     } else {
       return {
-        output: { // 输出重构  打包编译后的 文件名称  【模块名称.版本号.时间戳】
+        output: {
+          // 输出重构  打包编译后的 文件名称  【模块名称.版本号.时间戳】
           filename: `js/[name].${Timestamp}.js`,
           chunkFilename: `js/[name].${Timestamp}.js`
         },
